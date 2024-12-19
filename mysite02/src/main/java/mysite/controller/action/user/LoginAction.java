@@ -6,6 +6,7 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import mysite.controller.ActionServlet.Action;
 import mysite.dao.UserDao;
 import mysite.vo.UserVo;
@@ -31,7 +32,20 @@ public class LoginAction implements Action {
 		}
 		
 		// 로그인 처리
+		/*
+		 * 원리: SessionManager 내, JSESSIONID, HttpSession Map을 통해 로그인 유무를 확인한다.
+		 * */
+		/*
+			 HttpSession에 반환할 내용이 없는 경우, SessionManager에서 JSESSIONID 기반의 
+			 HttpSession을 새로 만들어서 반환해준다. 
+			 단 위 조건은 request.getSession 내부 변수를 true로 설정해야 가능하다.
+			 브라우저 별로 JSESSIONID가 다르다.
+		*/
+		HttpSession session = request.getSession(true);
+		// HttpSession 내 AttributeMap에 정보를 저장하는 과정 
+		session.setAttribute("authUser", vo);
 		
+		response.sendRedirect(request.getContextPath());
 	}
 
 }
