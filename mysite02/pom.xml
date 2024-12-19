@@ -47,6 +47,11 @@
 	    <scope>test</scope>
 	</dependency>
 
+	<dependency>
+		<groupId>com.poscodx</groupId>
+		<artifactId>guestbook02</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
   </dependencies>
   
   <build>
