@@ -52,21 +52,21 @@ public class UserDao {
 	}
 
 	public UserVo findByEmailAndPassword(String email, String password) {
-		
+
 		UserVo userVo = null;
-		
+
 		try (Connection conn = getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(
-						"select id, name from user where email=? and password=?");) {
+				PreparedStatement pstmt = conn
+						.prepareStatement("select id, name from user where email=? and password=?");) {
 			pstmt.setString(1, email);
 			pstmt.setString(2, password);
 
 			ResultSet rs = pstmt.executeQuery();
 
-			if(rs.next()) {
+			if (rs.next()) {
 				Long id = rs.getLong(1);
 				String name = rs.getString(2);
-				
+
 				userVo = new UserVo();
 				userVo.setId(id);
 				userVo.setName(name);
@@ -75,8 +75,71 @@ public class UserDao {
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
 		}
-		
+
 		return userVo;
+
+	}
+
+	public UserVo findById(Long id) {
+		UserVo userVo = null;
+
+		try (Connection conn = getConnection();
+				PreparedStatement pstmt = conn
+						.prepareStatement("select name, email, gender from user where id=?");
+		) {
+			pstmt.setLong(1, id);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				String name = rs.getString(1);
+				String email = rs.getString(2);
+				String gender = rs.getString(3);
+
+				userVo = new UserVo();
+				userVo.setName(name);
+				userVo.setEmail(email);
+				userVo.setGender(gender);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		}
+
+		return userVo;
+	}
+
+	public void updateUserByEmail(UserVo vo) {
+		
+		try (Connection conn = getConnection();
+				PreparedStatement pstmt1 = conn
+						.prepareStatement("UPDATE user SET name = ?, gender=? WHERE email = ?");
+				PreparedStatement pstmt2 = conn
+						.prepareStatement("UPDATE user SET name = ?, password = ?, gender=? WHERE email = ?");
+		) {
+			int count = 0;
+			if(vo.getPassword() == null || vo.getPassword().length() == 0) {
+				pstmt1.setString(1, vo.getName());
+				pstmt1.setString(2, vo.getGender());
+				pstmt1.setString(3, vo.getEmail());
+
+				count = pstmt1.executeUpdate();
+			} else {
+				pstmt2.setString(1, vo.getName());
+				pstmt2.setString(2, vo.getPassword());
+				pstmt2.setString(3, vo.getGender());
+				pstmt2.setString(4, vo.getEmail());
+
+				count = pstmt2.executeUpdate();
+			}
+
+			if (count < 1) {
+				System.out.println("Update failed. No rows affected.");
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		}
 
 	}
 
