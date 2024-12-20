@@ -61,4 +61,28 @@ public class GuestbookDao {
 		return conn;
 	}
 
+	public int insert(GuestbookVo vo) {
+		int count = 0;
+
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("insert into guestbook (name, password, contents, reg_date) values(?, ?, ?, now())");
+		) {
+			pstmt.setString(1, vo.getName());
+			pstmt.setString(2, vo.getPassword());
+			pstmt.setString(3, vo.getContents());
+
+			count = pstmt.executeUpdate();
+			
+			if (count == 0) {
+			    System.out.println("Insert failed. No rows affected.");
+			}
+
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		}
+
+		return count;
+	}
+
 }

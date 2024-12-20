@@ -2,7 +2,7 @@
 <%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%
-	List<GuestbookVo> list = (List<GuestbookVo>) request.getAttribute("list"); 
+	List<GuestbookVo> list = (List<GuestbookVo>) request.getAttribute("list");
 %>
 <!DOCTYPE html>
 <html>
@@ -16,18 +16,18 @@
 		<jsp:include page="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="guestbook">
-				<form action="/guestbook" method="post">
-					<input type="hidden" name="a" value="insert">
+				<form action="<%=request.getContextPath() %>/guestbook" method="post">
+					<input type="hidden" name="a" value="add">
 					<table>
 						<tr>
 							<td>이름</td><td><input type="text" name="name"></td>
-							<td>비밀번호</td><td><input type="password" name="pass"></td>
+							<td>비밀번호</td><td><input type="password" name="password"></td>
 						</tr>
 						<tr>
-							<td colspan=4><textarea name="content" id="content"></textarea></td>
+							<td colspan=4><textarea name="contents" id="contents"></textarea></td>
 						</tr>
 						<tr>
-							<td colspan=4 align=right><input type="submit" VALUE=" 확인 "></td>
+							<td colspan=4 align=right><input type="submit" value=" 확인 "></td>
 						</tr>
 					</table>
 				</form>

@@ -1,13 +1,8 @@
 package mysite.controller;
 
-import java.io.IOException;
 import java.util.Map;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import mysite.controller.action.guestbook.AddAction;
 import mysite.controller.action.guestbook.DeleteAction;
 import mysite.controller.action.guestbook.DeleteFormAction;
