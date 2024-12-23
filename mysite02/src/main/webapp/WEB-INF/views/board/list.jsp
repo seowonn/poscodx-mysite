@@ -1,14 +1,17 @@
+<%@ taglib uri="jakarta.tags.core" prefix="c"%>
+<%@ taglib uri="jakarta.tags.fmt" prefix="fmt"%>
+<%@ taglib uri="jakarta.tags.functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="/assets/css/board.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/assets/css/board.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div id="container">
-		<jsp:include page="/WEB-INF/views/includes/header.jsp"/>
+		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="" method="post">
@@ -23,39 +26,57 @@
 						<th>조회수</th>
 						<th>작성일</th>
 						<th>&nbsp;</th>
-					</tr>				
-					<tr>
-						<td>3</td>
-						<td><a href="">세 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-10-11 12:04:20</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td><a href="">두 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-10-02 12:04:12</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td><a href="">첫 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-09-25 07:24:32</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
+					</tr>		
+							
+					<c:set var="count" value="${fn:length(list)}"/>
+					<c:forEach items="${list}" var="vo" varStatus="status">
+						<tr>
+							<td>${count-status.index}</td>
+							<td style="text-align:left; padding-left:${vo.depth * 20}px"> <!-- 여기 0자리엔 depth가 들어가함. -->
+								<a href="${pageContext.request.contextPath}/board?a=view&id=${vo.id}">${vo.title}</a>
+							</td>
+							<td>${vo.userName}</td>
+							<td>3</td>
+							<td>${vo.regDate}</td>
+							<c:if test="${not empty authUser and vo.userId == authUser.id}">
+								<td><a href="${pageContext.request.contextPath}/board?a=delete&id=${vo.id}" class="del">삭제</a></td>
+							</c:if>
+						</tr>
+					</c:forEach>
 				</table>
+				
+				<!-- pager 추가 -->
+				<!-- 
+				<div class="pager">
+					<ul>
+						<c:if test="${currentPage > 1}">							
+							<li><a href="?page=${currentPage -1}">◀</a></li>
+						</c:if>
+						
+						<c:forEach begin="1" end="${totalPages}" var="page">						
+							<li class="${page == currentPage ? 'selected' : ''}">
+								<a href="?page=${page}">${page}</a>
+							</li>
+						</c:forEach>
+						
+						<c:if test="${currentPage < totalPages}">							
+							<li><a href="?page=${currentPage + 1}">▶</a></li>
+						</c:if>
+						
+					</ul>
+				</div>	
+				-->				
+				<!-- pager 추가 -->
+				
 				<div class="bottom">
-					<a href="" id="new-book">글쓰기</a>
+					<c:if test="${not empty authUser}">
+						<a href="${pageContext.request.contextPath}/board?a=writeform" id="new-book">글쓰기</a>
+					</c:if>
 				</div>				
 			</div>
 		</div>
-		<jsp:include page="/WEB-INF/views/includes/navigation.jsp"/>
-		<jsp:include page="/WEB-INF/views/includes/footer.jsp"/>
+		<c:import url="/WEB-INF/views/includes/navigation.jsp"/>
+		<c:import url="/WEB-INF/views/includes/footer.jsp"/>
 	</div>
 </body>
 </html>

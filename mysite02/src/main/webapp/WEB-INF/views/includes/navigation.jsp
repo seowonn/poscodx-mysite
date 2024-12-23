@@ -5,7 +5,14 @@
 
 		<div id="navigation">
 			<ul>
-				<li><a href="${pageContext.request.contextPath}">안대혁</a></li>
+				<c:choose>
+					<c:when test="${not empty authUser}">
+						<li><a href="${pageContext.request.contextPath}">${authUser.name}</a></li>
+					</c:when>
+					<c:otherwise>
+						<li><a href="${pageContext.request.contextPath}">방문자</a></li>
+					</c:otherwise>
+				</c:choose>
 				<li><a href="${pageContext.request.contextPath}/guestbook">방명록</a></li>
 				<li><a href="${pageContext.request.contextPath}/board">게시판</a></li>
 			</ul>
