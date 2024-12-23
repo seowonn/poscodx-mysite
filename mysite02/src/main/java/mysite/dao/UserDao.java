@@ -95,6 +95,7 @@ public class UserDao {
 				String name = rs.getString(1);
 				String email = rs.getString(2);
 				String gender = rs.getString(3);
+				System.out.println(name);
 
 				userVo = new UserVo();
 				userVo.setName(name);
