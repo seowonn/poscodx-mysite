@@ -23,9 +23,9 @@ public class BoardListAction implements Action {
 		List<BoardVo> list = new BoardDao().findAll(DEFAULT_PAGE_SIZE, offset);
 		request.setAttribute("list", list);
 		
-//		int totalPages = 0;
-//		request.setAttribute("currentPage", currentPage);
-//		request.setAttribute("totalPages", totalPages);
+		int totalPages = (int) Math.ceil((double) new BoardDao().count() / DEFAULT_PAGE_SIZE);
+		request.setAttribute("currentPage", currentPage);
+		request.setAttribute("totalPages", totalPages);
 		
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/board/list.jsp");
 		rd.forward(request, response);

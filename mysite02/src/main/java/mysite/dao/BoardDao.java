@@ -153,6 +153,23 @@ public class BoardDao {
 		}
 	}
 	
+	public int count() {
+		int count = 0;
+		try (Connection conn = getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(
+						"select count(*) from board");
+				ResultSet rs = pstmt.executeQuery();
+		) {
+			if(rs.next()) {
+				count = rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		}
+		return count;
+	}
+	
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 

@@ -45,8 +45,6 @@
 					</c:forEach>
 				</table>
 				
-				<!-- pager 추가 -->
-				<!-- 
 				<div class="pager">
 					<ul>
 						<c:if test="${currentPage > 1}">							
@@ -65,8 +63,6 @@
 						
 					</ul>
 				</div>	
-				-->				
-				<!-- pager 추가 -->
 				
 				<div class="bottom">
 					<c:if test="${not empty authUser}">
