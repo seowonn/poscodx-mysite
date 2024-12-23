@@ -1,25 +1,21 @@
-<%@page import="mysite.vo.UserVo"%>
+<%@ taglib uri="jakarta.tags.core" prefix="c"%>
+<%@ taglib uri="jakarta.tags.fmt" prefix="fmt"%>
+<%@ taglib uri="jakarta.tags.functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- JSP에는 내부적으로 HttpSession session = request.getSession(true); 가 삽입되어 있다. -->
-<%
-	UserVo authUser = (UserVo) session.getAttribute("authUser");	
-%>
-		<div id="header">
-			<h1>MySite</h1>
-			<ul>
-				<%
-					if(authUser == null) {
-				%>
-					<li><a href="<%=request.getContextPath() %>/user?a=loginform">로그인</a><li>
-					<li><a href="<%=request.getContextPath() %>/user?a=joinform">회원가입</a><li>
-				<%
-					} else {
-				%>
-					<li><a href="<%=request.getContextPath() %>/user?a=updateform">회원정보수정</a><li>
-					<li><a href="<%=request.getContextPath() %>/user?a=logoutform">로그아웃</a><li>
-					<li><%=authUser.getName() %>님 안녕하세요 ^^;</li>
-				<%
-					}
-				%>
-			</ul>
-		</div>
+	<div id="header">
+		<h1>MySite</h1>
+		<ul>
+			<c:choose>
+				<c:when test="${empty authUser}">
+					<li><a href="${pageContext.request.contextPath}/user?a=loginform">로그인</a><li>
+					<li><a href="${pageContext.request.contextPath}/user?a=joinform">회원가입</a><li>
+				</c:when>
+				<c:otherwise>
+					<li><a href="${pageContext.request.contextPath}/user?a=updateform">회원정보수정</a><li>
+					<li><a href="${pageContext.request.contextPath}/user?a=logoutform">로그아웃</a><li>
+					<li>${authUser.name}님 안녕하세요 ^^;</li>
+				</c:otherwise>
+			</c:choose>
+		</ul>
+	</div>
