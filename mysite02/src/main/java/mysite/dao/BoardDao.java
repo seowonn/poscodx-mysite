@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mysite.vo.BoardVo;
+import mysite.vo.ParentBoardVo;
+import mysite.vo.ReplyBoardVo;
 
 public class BoardDao {
 
@@ -183,6 +185,60 @@ public class BoardDao {
 			System.out.println("error: " + e);
 		}
 		return count;
+	}
+
+	public ParentBoardVo getParentBoardInfo(Long id) {
+		ParentBoardVo result = new ParentBoardVo();
+
+		try (Connection conn = getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT g_no, o_no, depth "
+						+ "FROM board WHERE id = ?");
+		) {
+			pstmt.setLong(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result.setgNo(rs.getInt(1));
+				result.setoNo(rs.getInt(2));
+				result.setDepth(rs.getInt(3));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		}
+		return result;
+	}
+	
+	public void insertBoardReply(ReplyBoardVo vo) {
+		
+		String updateQuery = "UPDATE board SET o_no = o_no + 1 WHERE g_no = ? AND o_no >= ?";
+		String insertQuery = "INSERT INTO board (title, contents, hit, reg_date, g_no, o_no, depth, user_id) "
+				+ "VALUES(?, ?, 0, NOW(), ?, ?, ?, ?)";
+		
+		try (Connection conn = getConnection()) {
+			
+			try(PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+				pstmt.setInt(1, vo.getgNo());
+				pstmt.setInt(2, vo.getoNo() + 1);
+				pstmt.executeUpdate();
+			}
+			
+			try(PreparedStatement pstmt = conn.prepareStatement(insertQuery)){				
+				pstmt.setString(1, vo.getTitle());
+				pstmt.setString(2, vo.getContents());
+				pstmt.setInt(3, vo.getgNo());
+				pstmt.setInt(4, vo.getoNo() + 1);
+				pstmt.setInt(5, vo.getDepth() + 1);
+				pstmt.setLong(6, vo.getUserId());
+
+				int count = pstmt.executeUpdate();
+				if (count == 0) {
+					System.out.println("Insert failed. No rows affected.");
+				}
+			}
+
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		}
 	}
 	
 	private Connection getConnection() throws SQLException {
