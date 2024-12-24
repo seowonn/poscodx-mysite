@@ -20,7 +20,7 @@
 					<input id="email" name="email" type="text" value="${empty reqeustScope.email ? '' : requestScope.email}">
 					<label class="block-label" >패스워드</label>
 					<input name="password" type="password" value="">
-					<c:if test='${"fail" == result }'>
+					<c:if test='${result eq "fail"}'>
 						<p>
 							로그인이 실패 했습니다.
 						</p>

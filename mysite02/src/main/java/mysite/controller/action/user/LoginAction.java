@@ -15,37 +15,33 @@ public class LoginAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		
-		UserVo vo = new UserDao().findByEmailAndPassword(email, password);
-		
-		// 로그인 실패
-		if(vo == null) {
-//			response.sendRedirect(request.getContextPath() + "/user?a=loginform");
-
-			request.setAttribute("result", "fail");
-			request.setAttribute("email", email);
-			
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/loginform.jsp");
-			rd.forward(request, response);
+		if(email == null || email.length() == 0 || password == null || password.length() == 0) {
+			loginFailed(request, response, email);
+			return;
 		}
 		
-		// 로그인 처리
-		/*
-		 * 원리: SessionManager 내, JSESSIONID, HttpSession Map을 통해 로그인 유무를 확인한다.
-		 * */
-		/*
-			 HttpSession에 반환할 내용이 없는 경우, SessionManager에서 JSESSIONID 기반의 
-			 HttpSession을 새로 만들어서 반환해준다. 
-			 단 위 조건은 request.getSession 내부 변수를 true로 설정해야 가능하다.
-			 브라우저 별로 JSESSIONID가 다르다.
-		*/
-		HttpSession session = request.getSession(true);
-		// HttpSession 내 AttributeMap에 정보를 저장하는 과정 
-		session.setAttribute("authUser", vo);
+		UserVo vo = new UserDao().findByEmailAndPassword(email, password);
+		if(vo == null) {
+			loginFailed(request, response, email);
+			return;
+		}
 		
+		HttpSession session = request.getSession(true);
+		session.setAttribute("authUser", vo);
 		response.sendRedirect(request.getContextPath());
+	}
+	
+	private void loginFailed(HttpServletRequest request, HttpServletResponse response, String email) throws ServletException, IOException {
+		request.setAttribute("result", "fail");
+		if(email != null && email.length() > 0) {
+			request.setAttribute("email", email);
+		}
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/loginform.jsp");
+		rd.forward(request, response);
 	}
 
 }
