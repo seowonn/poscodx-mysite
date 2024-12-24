@@ -58,18 +58,33 @@ public class BoardDao {
 	}
 
 	public void insert(BoardVo vo) {
-		try (Connection conn = getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(
-						"insert into board (title, contents, hit, reg_date, g_no, o_no, depth, user_id) "
-								+ "values(?, ?, 0, now(), 1, 1, 0, ?)");) {
-			pstmt.setString(1, vo.getTitle());
-			pstmt.setString(2, vo.getContents());
-			pstmt.setLong(3, vo.getUserId());
+		
+		String selectQuery = "SELECT COALESCE(MAX(g_no), 0) + 1 FROM board";
+		String insertQuery = "INSERT INTO board (title, contents, hit, reg_date, g_no, o_no, depth, user_id) "
+				+ "VALUES(?, ?, 0, NOW(), ?, 1, 0, ?)";
+		
+		try (Connection conn = getConnection()) {
+			Long nextGno = 1L;
+			
+			try(
+				PreparedStatement pstmt = conn.prepareStatement(selectQuery);
+				ResultSet rs = pstmt.executeQuery()
+			) {
+				if(rs.next()) {
+					nextGno = rs.getLong(1);
+				}
+			}
+			
+			try(PreparedStatement pstmt = conn.prepareStatement(insertQuery)){				
+				pstmt.setString(1, vo.getTitle());
+				pstmt.setString(2, vo.getContents());
+				pstmt.setLong(3, nextGno);
+				pstmt.setLong(4, vo.getUserId());
 
-			int count = pstmt.executeUpdate();
-
-			if (count == 0) {
-				System.out.println("Insert failed. No rows affected.");
+				int count = pstmt.executeUpdate();
+				if (count == 0) {
+					System.out.println("Insert failed. No rows affected.");
+				}
 			}
 
 		} catch (SQLException e) {
