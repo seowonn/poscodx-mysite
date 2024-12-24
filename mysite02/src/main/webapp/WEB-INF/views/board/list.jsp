@@ -33,7 +33,10 @@
 						<tr>
 							<td>${count-status.index}</td>
 							<td style="text-align:left; padding-left:${vo.depth * 20}px"> <!-- 여기 0자리엔 depth가 들어가함. -->
-								<a href="${pageContext.request.contextPath}/board?a=view&id=${vo.id}">${vo.title}</a>
+							    <c:if test="${vo.depth != 0}">
+							        <img src="${pageContext.request.contextPath}/assets/images/reply.png"/>
+							    </c:if>
+							    <a href="${pageContext.request.contextPath}/board?a=view&id=${vo.id}">${vo.title}</a>
 							</td>
 							<td>${vo.userName}</td>
 							<td>${vo.hit}</td>
