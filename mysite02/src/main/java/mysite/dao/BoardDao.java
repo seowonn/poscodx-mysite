@@ -19,7 +19,7 @@ public class BoardDao {
 
 		try (Connection conn = getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("select b.id, b.title, b.contents, b.hit, b.reg_date, "
-						+ "b.g_no, b.o_no, b.depth, a.name, a.id " + "from board b "
+						+ "b.depth, a.name, a.id " + "from board b "
 						+ "join user a on a.id = b.user_id " + "order by g_no desc, o_no asc " + "limit ? offset ?");
 
 		) {
@@ -28,23 +28,20 @@ public class BoardDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				// TODO: 여기 불필요 정보까지 쿼리 해왔을 수도 있음.
 				Long id = rs.getLong(1);
 				String title = rs.getString(2);
 				String contents = rs.getString(3);
 				int hit = rs.getInt(4);
 				String regDate = rs.getString(5);
-				int gNo = rs.getInt(6);
-				int oNo = rs.getInt(7);
-				int depth = rs.getInt(8);
-				String userName = rs.getString(9);
-				Long userId = rs.getLong(10);
+				int depth = rs.getInt(6);
+				String userName = rs.getString(7);
+				Long userId = rs.getLong(8);
 
 				BoardVo vo = new BoardVo();
 				vo.setId(id);
 				vo.setTitle(title);
 				vo.setContents(contents);
-
+				vo.setHit(hit);
 				vo.setRegDate(regDate);
 				vo.setDepth(depth);
 				vo.setUserName(userName);
@@ -110,41 +107,49 @@ public class BoardDao {
 	}
 
 	public BoardVo findById(Long id) {
+		
+		String updateQuery = "UPDATE board SET hit = hit + 1 WHERE id = ?";
+		String seleectQuery = "SELECT title, contents, hit, reg_date, g_no, o_no, depth, user_id FROM board WHERE id = ?";
 		BoardVo result = null;
-
-		try (Connection conn = getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("select title, contents, hit, "
-						+ "reg_date, g_no, o_no, depth, user_id from board where id = ?");
-
-		) {
-			pstmt.setLong(1, id);
-
-			ResultSet rs = pstmt.executeQuery();
-			if (rs.next()) {
-				String title = rs.getString(1);
-				String contents = rs.getString(2);
-				int hit = rs.getInt(3);
-				String regDate = rs.getString(4);
-				int gNo = rs.getInt(5);
-				int oNo = rs.getInt(6);
-				int depth = rs.getInt(7);
-				Long userId = rs.getLong(8);
-
-				BoardVo vo = new BoardVo();
-				vo.setId(id);
-				vo.setTitle(title);
-				vo.setContents(contents);
-				vo.setHit(hit);
-
-				vo.setRegDate(regDate);
-				vo.setgNo(gNo);
-				vo.setoNo(oNo);
-				vo.setDepth(depth);
-				vo.setUserId(userId);
-
-				result = vo;
+		
+		try (Connection conn = getConnection()) {
+			
+			try(PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+				pstmt.setLong(1, id);
+				pstmt.executeUpdate();
 			}
-			rs.close();
+			
+			try(PreparedStatement pstmt = conn.prepareStatement(seleectQuery)){				
+				pstmt.setLong(1, id);
+
+				ResultSet rs = pstmt.executeQuery();
+				if (rs.next()) {
+					String title = rs.getString(1);
+					String contents = rs.getString(2);
+					int hit = rs.getInt(3);
+					String regDate = rs.getString(4);
+					int gNo = rs.getInt(5);
+					int oNo = rs.getInt(6);
+					int depth = rs.getInt(7);
+					Long userId = rs.getLong(8);
+
+					BoardVo vo = new BoardVo();
+					vo.setId(id);
+					vo.setTitle(title);
+					vo.setContents(contents);
+					vo.setHit(hit);
+
+					vo.setRegDate(regDate);
+					vo.setgNo(gNo);
+					vo.setoNo(oNo);
+					vo.setDepth(depth);
+					vo.setUserId(userId);
+
+					result = vo;
+				}
+				rs.close();
+			}
+
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
 		}
