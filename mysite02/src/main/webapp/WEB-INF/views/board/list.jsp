@@ -14,7 +14,8 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="" method="post">
+				<form id="search_form" action="${pageContext.request.contextPath}/board" method="post">
+					<input type="hidden" name="a" value="search"?>
 					<input type="text" id="kwd" name="kwd" value="">
 					<input type="submit" value="찾기">
 				</form>
@@ -27,11 +28,10 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>		
-							
-					<c:set var="count" value="${fn:length(list)}"/>
+					<c:set var="startNumber" value="${totalCount - (currentPage - 1) * pageSize}" />
 					<c:forEach items="${list}" var="vo" varStatus="status">
 						<tr>
-							<td>${count-status.index}</td>
+							<td>${startNumber-status.index}</td>
 							<td style="text-align:left; padding-left:${vo.depth * 20}px"> <!-- 여기 0자리엔 depth가 들어가함. -->
 							    <c:if test="${vo.depth != 0}">
 							        <img src="${pageContext.request.contextPath}/assets/images/reply.png"/>

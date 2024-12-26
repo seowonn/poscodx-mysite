@@ -242,6 +242,65 @@ public class BoardDao {
 		}
 	}
 	
+	public List<BoardVo> findByKeyword(String keyword, int pageSize, int offset) {
+	    List<BoardVo> result = new ArrayList<>();
+
+	    String query = "SELECT b.id, b.title, b.contents, b.hit, b.reg_date, "
+	                 + "b.depth, a.name, a.id "
+	                 + "FROM board b "
+	                 + "JOIN user a ON a.id = b.user_id "
+	                 + "WHERE b.title LIKE ? OR b.contents LIKE ? "
+	                 + "ORDER BY g_no DESC, o_no ASC "
+	                 + "LIMIT ? OFFSET ?";
+
+	    try (Connection conn = getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+	        pstmt.setString(1, "%" + keyword + "%");
+	        pstmt.setString(2, "%" + keyword + "%");
+	        pstmt.setInt(3, pageSize);
+	        pstmt.setInt(4, offset);
+
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            while (rs.next()) {
+	                BoardVo vo = new BoardVo();
+	                vo.setId(rs.getLong(1));
+	                vo.setTitle(rs.getString(2));
+	                vo.setContents(rs.getString(3));
+	                vo.setHit(rs.getInt(4));
+	                vo.setRegDate(rs.getString(5));
+	                vo.setDepth(rs.getInt(6));
+	                vo.setUserName(rs.getString(7));
+	                vo.setUserId(rs.getLong(8));
+	                result.add(vo);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error: " + e.getMessage());
+	    }
+	    return result;
+	}
+
+	
+	public int countByKeyword(String keyword) {
+		int count = 0;
+		try (Connection conn = getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(
+						"SELECT COUNT(*) FROM board b WHERE b.contents LIKE ? OR b.title LIKE ?");
+		) {
+			pstmt.setString(1, "%" + keyword + "%");
+			pstmt.setString(2, "%" + keyword + "%");
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				count = rs.getInt(1);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		}
+		return count;
+	}
+	
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 
@@ -256,7 +315,7 @@ public class BoardDao {
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
 		}
-
+		
 		return conn;
 	}
 
