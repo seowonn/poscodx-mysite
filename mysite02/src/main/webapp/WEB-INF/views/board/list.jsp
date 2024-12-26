@@ -47,7 +47,6 @@
 						</tr>
 					</c:forEach>
 				</table>
-				
 				<div class="pager">
 					<ul>
 						<c:if test="${currentPage > 1}">							

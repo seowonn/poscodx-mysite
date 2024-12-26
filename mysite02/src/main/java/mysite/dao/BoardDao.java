@@ -14,33 +14,30 @@ import mysite.vo.ReplyBoardVo;
 
 public class BoardDao {
 
-	public List<BoardVo> findAll(int page, int offset) {
+	public List<BoardVo> findAll(int pageSize, int offset) {
 		List<BoardVo> result = new ArrayList<BoardVo>();
 
 		try (Connection conn = getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("select b.id, b.title, b.contents, b.hit, b.reg_date, "
-						+ "b.depth, a.name, a.id " + "from board b "
-						+ "join user a on a.id = b.user_id " + "order by g_no desc, o_no asc " + "limit ? offset ?");
-
+				PreparedStatement pstmt = conn.prepareStatement("SELECT b.id, b.title, b.hit, b.reg_date, "
+						+ "b.depth, a.name, a.id " + "FROM board b "
+						+ "JOIN user a ON a.id = b.user_id " + "ORDER BY g_no DESC, o_no ASC " + "LIMIT ? OFFSET ?");
 		) {
-			pstmt.setInt(1, page);
+			pstmt.setInt(1, pageSize);
 			pstmt.setInt(2, offset);
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				Long id = rs.getLong(1);
 				String title = rs.getString(2);
-				String contents = rs.getString(3);
-				int hit = rs.getInt(4);
-				String regDate = rs.getString(5);
-				int depth = rs.getInt(6);
-				String userName = rs.getString(7);
-				Long userId = rs.getLong(8);
+				int hit = rs.getInt(3);
+				String regDate = rs.getString(4);
+				int depth = rs.getInt(5);
+				String userName = rs.getString(6);
+				Long userId = rs.getLong(7);
 
 				BoardVo vo = new BoardVo();
 				vo.setId(id);
 				vo.setTitle(title);
-				vo.setContents(contents);
 				vo.setHit(hit);
 				vo.setRegDate(regDate);
 				vo.setDepth(depth);
@@ -179,13 +176,12 @@ public class BoardDao {
 		int count = 0;
 		try (Connection conn = getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(
-						"select count(*) from board");
+						"SELECT COUNT(*) FROM board");
 				ResultSet rs = pstmt.executeQuery();
 		) {
 			if(rs.next()) {
 				count = rs.getInt(1);
 			}
-
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
 		}

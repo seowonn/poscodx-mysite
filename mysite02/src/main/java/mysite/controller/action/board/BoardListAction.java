@@ -17,13 +17,15 @@ public class BoardListAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int currentPage = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
+		int currentPage = Math.max(1, request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1);
 		int offset = (currentPage - 1) * DEFAULT_PAGE_SIZE;
 		
-		List<BoardVo> list = new BoardDao().findAll(DEFAULT_PAGE_SIZE, offset);
-		request.setAttribute("list", list);
+		BoardDao dao = new BoardDao();
+		List<BoardVo> list = dao.findAll(DEFAULT_PAGE_SIZE, offset);
+		int totalCount = dao.count();
+		int totalPages = (int) Math.ceil((double) totalCount / DEFAULT_PAGE_SIZE);
 		
-		int totalPages = (int) Math.ceil((double) new BoardDao().count() / DEFAULT_PAGE_SIZE);
+		request.setAttribute("list", list);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("totalPages", totalPages);
 		
