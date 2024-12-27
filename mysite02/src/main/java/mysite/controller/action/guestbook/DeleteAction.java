@@ -2,11 +2,11 @@ package mysite.controller.action.guestbook;
 
 import java.io.IOException;
 
-import guestbook.dao.GuestbookDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mysite.controller.ActionServlet.Action;
+import mysite.dao.GuestbookDao;
 
 public class DeleteAction implements Action {
 

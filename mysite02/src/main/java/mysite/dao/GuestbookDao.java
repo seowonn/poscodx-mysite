@@ -84,5 +84,29 @@ public class GuestbookDao {
 
 		return count;
 	}
+	
+	public int deleteByIdAndPassword(Long id, String password) {
+		int count = 0;
+		System.out.println(id);
+		System.out.println(password);
+
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM guestbook WHERE id=? AND password=?");
+		) {
+			pstmt.setLong(1, id);
+			pstmt.setString(2, password);
+			count = pstmt.executeUpdate();
+			
+			if (count == 0) {
+			    System.out.println("Delete failed. No rows affected.");
+			}
+
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		}
+
+		return count;
+	}
 
 }
