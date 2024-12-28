@@ -16,45 +16,6 @@ public class BoardDao {
 	
 	private final String SERVER_IP = "192.168.1.12";
 
-	public List<BoardVo> findAll(int pageSize, int offset) {
-		List<BoardVo> result = new ArrayList<BoardVo>();
-
-		try (Connection conn = getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT b.id, b.title, b.hit, b.reg_date, "
-						+ "b.depth, a.name, a.id " + "FROM board b "
-						+ "JOIN user a ON a.id = b.user_id " + "ORDER BY g_no DESC, o_no ASC " + "LIMIT ? OFFSET ?");
-		) {
-			pstmt.setInt(1, pageSize);
-			pstmt.setInt(2, offset);
-
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				Long id = rs.getLong(1);
-				String title = rs.getString(2);
-				int hit = rs.getInt(3);
-				String regDate = rs.getString(4);
-				int depth = rs.getInt(5);
-				String userName = rs.getString(6);
-				Long userId = rs.getLong(7);
-
-				BoardVo vo = new BoardVo();
-				vo.setId(id);
-				vo.setTitle(title);
-				vo.setHit(hit);
-				vo.setRegDate(regDate);
-				vo.setDepth(depth);
-				vo.setUserName(userName);
-				vo.setUserId(userId);
-
-				result.add(vo);
-			}
-			rs.close();
-		} catch (SQLException e) {
-			System.out.println("error: " + e);
-		}
-		return result;
-	}
-
 	public void insert(BoardVo vo) {
 		
 		String selectQuery = "SELECT COALESCE(MAX(g_no), 0) + 1 FROM board";
@@ -173,22 +134,6 @@ public class BoardDao {
 			System.out.println("error: " + e);
 		}
 	}
-	
-	public int count() {
-		int count = 0;
-		try (Connection conn = getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(
-						"SELECT COUNT(*) FROM board");
-				ResultSet rs = pstmt.executeQuery();
-		) {
-			if(rs.next()) {
-				count = rs.getInt(1);
-			}
-		} catch (SQLException e) {
-			System.out.println("error: " + e);
-		}
-		return count;
-	}
 
 	public ParentBoardVo getParentBoardInfo(Long id) {
 		ParentBoardVo result = new ParentBoardVo();
@@ -246,22 +191,29 @@ public class BoardDao {
 	
 	public List<BoardVo> findByKeyword(String keyword, int pageSize, int offset) {
 	    List<BoardVo> result = new ArrayList<>();
-
+	    
 	    String query = "SELECT b.id, b.title, b.contents, b.hit, b.reg_date, "
-	                 + "b.depth, a.name, a.id "
-	                 + "FROM board b "
-	                 + "JOIN user a ON a.id = b.user_id "
-	                 + "WHERE b.title LIKE ? OR b.contents LIKE ? "
-	                 + "ORDER BY g_no DESC, o_no ASC "
-	                 + "LIMIT ? OFFSET ?";
-
+					+ "b.depth, a.name, a.id " 
+					+ "FROM board b "
+					+ "JOIN user a ON a.id = b.user_id ";
+	    
+	    if(keyword != null && keyword.length() != 0) {
+	    	query += "WHERE b.title LIKE ? OR b.contents LIKE ? ";
+	    }
+	    
+	    query += "LIMIT ? OFFSET ?";
+	    System.out.println("page" + pageSize + " offset: " + offset);
+	    System.out.println(query);
 	    try (Connection conn = getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-	        pstmt.setString(1, "%" + keyword + "%");
-	        pstmt.setString(2, "%" + keyword + "%");
-	        pstmt.setInt(3, pageSize);
-	        pstmt.setInt(4, offset);
+	    	
+	    	int index = 1;
+	    	if(keyword != null && keyword.length() != 0) {	    		
+	    		pstmt.setString(index++, "%" + keyword + "%");
+	    		pstmt.setString(index++, "%" + keyword + "%");
+	    	}
+	        pstmt.setInt(index++, pageSize);
+	        pstmt.setInt(index++, offset);
 
 	        try (ResultSet rs = pstmt.executeQuery()) {
 	            while (rs.next()) {
@@ -282,16 +234,25 @@ public class BoardDao {
 	    }
 	    return result;
 	}
-
 	
 	public int countByKeyword(String keyword) {
 		int count = 0;
+		String selectQuery;
+		
+		if(keyword == null || keyword.length() == 0) {
+			selectQuery = "SELECT COUNT(*) FROM board";
+		} else {
+			selectQuery = "SELECT COUNT(*) FROM board b WHERE b.contents LIKE ? OR b.title LIKE ?";
+		}
+		
 		try (Connection conn = getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(
-						"SELECT COUNT(*) FROM board b WHERE b.contents LIKE ? OR b.title LIKE ?");
+				PreparedStatement pstmt = conn.prepareStatement(selectQuery);
 		) {
-			pstmt.setString(1, "%" + keyword + "%");
-			pstmt.setString(2, "%" + keyword + "%");
+			if(keyword != null && keyword.length() != 0) {				
+				pstmt.setString(1, "%" + keyword + "%");
+				pstmt.setString(2, "%" + keyword + "%");
+			}
+			
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
 				count = rs.getInt(1);
@@ -300,6 +261,7 @@ public class BoardDao {
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
 		}
+		
 		return count;
 	}
 	

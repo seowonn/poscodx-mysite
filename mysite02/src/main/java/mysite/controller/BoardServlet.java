@@ -5,7 +5,6 @@ import java.util.Map;
 import jakarta.servlet.annotation.WebServlet;
 import mysite.controller.action.board.BoardListAction;
 import mysite.controller.action.board.DeleteAction;
-import mysite.controller.action.board.SearchAction;
 import mysite.controller.action.board.UpdateAction;
 import mysite.controller.action.board.UpdateFormAction;
 import mysite.controller.action.board.ViewAction;
@@ -22,8 +21,7 @@ public class BoardServlet extends ActionServlet {
 			"view", new ViewAction(),
 			"updateform", new UpdateFormAction(),
 			"update", new UpdateAction(),
-			"delete", new DeleteAction(),
-			"search", new SearchAction()
+			"delete", new DeleteAction()
 	);
 
 	@Override

@@ -17,12 +17,13 @@ public class BoardListAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String keyword = request.getParameter("kwd");
 		int currentPage = Math.max(1, request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1);
 		int offset = (currentPage - 1) * DEFAULT_PAGE_SIZE;
 		
 		BoardDao dao = new BoardDao();
-		List<BoardVo> list = dao.findAll(DEFAULT_PAGE_SIZE, offset);
-		int totalCount = dao.count();
+		List<BoardVo> list = dao.findByKeyword(keyword, DEFAULT_PAGE_SIZE, offset);
+		int totalCount = dao.countByKeyword(keyword);
 		int totalPages = (int) Math.ceil((double) totalCount / DEFAULT_PAGE_SIZE);
 		
 		request.setAttribute("list", list);
@@ -30,9 +31,10 @@ public class BoardListAction implements Action {
 		request.setAttribute("pageSize", DEFAULT_PAGE_SIZE);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("totalPages", totalPages);
+		request.setAttribute("keyword", keyword);
 		
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/board/list.jsp");
-		rd.forward(request, response);
+		rd.forward(request, response);	
 	}
 
 }
