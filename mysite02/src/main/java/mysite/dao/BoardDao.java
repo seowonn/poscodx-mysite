@@ -13,6 +13,8 @@ import mysite.vo.ParentBoardVo;
 import mysite.vo.ReplyBoardVo;
 
 public class BoardDao {
+	
+	private final String SERVER_IP = "192.168.1.12";
 
 	public List<BoardVo> findAll(int pageSize, int offset) {
 		List<BoardVo> result = new ArrayList<BoardVo>();
@@ -307,7 +309,7 @@ public class BoardDao {
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 
-			String url = "jdbc:mariadb://192.168.0.10:3306/webdb";
+			String url = "jdbc:mariadb://" + SERVER_IP + ":3306/webdb";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 
 		} catch (ClassNotFoundException e) {

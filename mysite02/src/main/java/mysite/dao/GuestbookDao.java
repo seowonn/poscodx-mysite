@@ -11,6 +11,8 @@ import java.util.List;
 import mysite.vo.GuestbookVo;
 
 public class GuestbookDao {
+	
+	private final String SERVER_IP = "192.168.1.12";
 
 	public List<GuestbookVo> findAll() {
 		List<GuestbookVo> result = new ArrayList<>();
@@ -41,24 +43,6 @@ public class GuestbookDao {
 		}
 
 		return result;
-	}
-	
-	private Connection getConnection() throws SQLException {
-		Connection conn = null;
-
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-
-			String url = "jdbc:mariadb://192.168.0.10:3306/webdb";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패: " + e);
-		} catch (SQLException e) {
-			System.out.println("error: " + e);
-		}
-
-		return conn;
 	}
 
 	public int insert(GuestbookVo vo) {
@@ -107,6 +91,24 @@ public class GuestbookDao {
 		}
 
 		return count;
+	}
+	
+	private Connection getConnection() throws SQLException {
+		Connection conn = null;
+
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+
+			String url = "jdbc:mariadb://" + SERVER_IP + ":3306/webdb";
+			conn = DriverManager.getConnection(url, "webdb", "webdb");
+
+		} catch (ClassNotFoundException e) {
+			System.out.println("드라이버 로딩 실패: " + e);
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		}
+
+		return conn;
 	}
 
 }

@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import mysite.vo.UserVo;
 
 public class UserDao {
+	
+	private final String SERVER_IP = "192.168.1.12";
 
 	public void insert(UserVo vo) {
 		int count = 0;
@@ -31,24 +33,6 @@ public class UserDao {
 			System.out.println("error: " + e);
 		}
 
-	}
-
-	private Connection getConnection() throws SQLException {
-		Connection conn = null;
-
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-
-			String url = "jdbc:mariadb://192.168.0.10:3306/webdb";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패: " + e);
-		} catch (SQLException e) {
-			System.out.println("error: " + e);
-		}
-
-		return conn;
 	}
 
 	public UserVo findByEmailAndPassword(String email, String password) {
@@ -142,6 +126,24 @@ public class UserDao {
 			System.out.println("error: " + e);
 		}
 
+	}
+	
+	private Connection getConnection() throws SQLException {
+		Connection conn = null;
+
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+
+			String url = "jdbc:mariadb://" + SERVER_IP + ":3306/webdb";
+			conn = DriverManager.getConnection(url, "webdb", "webdb");
+
+		} catch (ClassNotFoundException e) {
+			System.out.println("드라이버 로딩 실패: " + e);
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		}
+
+		return conn;
 	}
 
 }
