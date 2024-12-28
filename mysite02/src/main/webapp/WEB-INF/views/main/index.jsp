@@ -16,12 +16,13 @@
 		<div id="wrapper">
 			<div id="content">
 				<div id="site-introduction">
-					<img id="profile" src="${pageContext.request.contextPath}/assets/images/myProfile.png" width="150">
 					<c:choose>
 						<c:when test="${empty authUser}">
+							<img id="profile" src="${pageContext.request.contextPath}/assets/images/anonymous_user.jpeg">
 							<h2>안녕하세요. mysite에 오신 것을 환영합니다.</h2>
 						</c:when>
 						<c:otherwise>
+							<img id="profile" src="${pageContext.request.contextPath}/assets/images/myProfile.png">
 							<h2>안녕하세요. ${authUser.name}의  mysite에 오신 것을 환영합니다.</h2>
 						</c:otherwise>
 					</c:choose>
