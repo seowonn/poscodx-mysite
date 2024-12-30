@@ -19,7 +19,12 @@
 	<context:component-scan base-package="mysite.controller" />
 	
 	<!-- Validator, ConverstionService, MessageConverter를 자동으로 등록 -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven>
+		<!-- ArgumentResolvers -->
+		<mvc:argument-resolvers>
+			<bean class="mysite.security.AuthUserHandlerMethodArgumentResolver"></bean>
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
 	
 	<!-- DefaultServlet Handler -->
 	<mvc:default-servlet-handler/>
@@ -33,6 +38,14 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/user/logout"/>
 			<bean class="mysite.security.LogoutInterceptor"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:mapping path="/user/auth"/>
+			<mvc:mapping path="/user/logout"/>
+			<mvc:mapping path="/assets/**/"/>
+			<!-- path="/**"로 설정하면 모든 경로에 대해 interceptor가 동작하여, webapps의 css 파일들도 접근할 수 없게 된다. -->
+			<bean class="mysite.security.AuthInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
 
