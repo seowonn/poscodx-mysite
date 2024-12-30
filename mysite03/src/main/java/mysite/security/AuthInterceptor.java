@@ -48,11 +48,12 @@ public class AuthInterceptor implements HandlerInterceptor{
 			return false;
 		}
 		
-		if(!authUser.getRole().equals(role)) {
+		// role이 USER인 사용자는 USER role만 접근가능하다.
+		if(!"USER".equals(role) && "USER".equals(authUser.getRole())) {
 			return false;
 		}
 		
-		// 5. @Auth가 붙어 있고 인증도 된 경우 == 더 이상 처리가 필요없는 상태
+		// 5. @Auth가 붙어 있고 인증도 된 경우 + ADMIN인 경우 == 더 이상 처리가 필요없는 상태
 		return true;
 	}
 

@@ -10,7 +10,6 @@ import mysite.security.Auth;
 @RequestMapping("/admin")
 public class AdminController {
 
-	@Auth(role = "ADMIN")
 	@RequestMapping({"", "/main"})
 	public String main() {
 		return "admin/main";
