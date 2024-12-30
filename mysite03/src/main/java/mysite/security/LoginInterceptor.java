@@ -47,6 +47,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 		 * preHandle 내부에서의 작업(예: forward나 redirect)이 실행되기 때문.
 		 * Interceptor 내부에서 필요한 처리(login)를 모두 끝냈기 때문에 이후 요청 흐름이 필요 없고, 동작에 문제가 없음.
 		 */
+		System.out.println("[authUser]: " + authUser);
 		return false;	
 	}
 
