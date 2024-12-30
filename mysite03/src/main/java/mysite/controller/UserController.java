@@ -40,27 +40,6 @@ public class UserController {
 		return "user/login";
 	}
 	
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(HttpSession session, UserVo userVo, Model model) {
-		UserVo authUser = userService.getUser(userVo.getEmail(), userVo.getPassword());
-		if(authUser == null) {
-			model.addAttribute("email", userVo.getEmail());
-			model.addAttribute("result", "fail");
-			return "user/login";
-		}
-		
-		// login 처리
-		session.setAttribute("authUser", authUser);
-		return "redirect:/";
-	}
-	
-	@RequestMapping("/logout")
-	public String logout(HttpSession session) {
-		session.removeAttribute("authUser");
-		session.invalidate();
-		return "redirect:/";
-	}
-	
 	@RequestMapping(value = "/update", method = RequestMethod.GET)
 	public String update(HttpSession session, Model model) {
 		// Access Control

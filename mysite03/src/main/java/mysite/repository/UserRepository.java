@@ -42,7 +42,7 @@ public class UserRepository {
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 
-			String url = "jdbc:mariadb://192.168.0.10:3306/webdb";
+			String url = "jdbc:mariadb://192.168.0.3:3306/webdb";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 
 		} catch (ClassNotFoundException e) {
