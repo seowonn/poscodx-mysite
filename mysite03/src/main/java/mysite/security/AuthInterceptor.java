@@ -36,8 +36,8 @@ public class AuthInterceptor implements HandlerInterceptor{
 			return true;
 		}
 		
-		// 5. @Auth가 붙어 있기 때문에 인증(Authentication) 여부 확인 가능
-		// 세션에 있는 role이랑 판단해줘야 함(?)
+		// 6. @Auth가 붙어 있기 때문에 인증(Authentication) 여부 확인 가능
+		// 7. 세션에 있는 role이랑 판단해줘야 함
 		String role = auth.role();
 		
 		HttpSession session = request.getSession();
@@ -48,9 +48,15 @@ public class AuthInterceptor implements HandlerInterceptor{
 			return false;
 		}
 		
-		// role이 USER인 사용자는 USER role만 접근가능하다.
-		if(!"USER".equals(role) && "USER".equals(authUser.getRole())) {
-			return false;
+		//8. @Auth의 role이 "USER"인 경우, authUser의 role은 "USER" 또는 "ADMIN" 이던 상관없다.
+		if("USER".equals(role)) {
+			return true;
+		}
+		
+		// 9. ADMIN은 ADMIN만 접근 가능하다.
+		if (!"ADMIN".equals(authUser.getRole())) {
+		    response.sendRedirect(request.getContextPath());
+		    return false;
 		}
 		
 		// 5. @Auth가 붙어 있고 인증도 된 경우 + ADMIN인 경우 == 더 이상 처리가 필요없는 상태
