@@ -5,90 +5,40 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
+import javax.sql.DataSource;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import mysite.vo.UserVo;
 
 @Repository
 public class UserRepository {
+	
+	@Autowired
+	private DataSource dataSource;
+	
+	private SqlSession sqlSession;
 
-	public void insert(UserVo vo) {
-		int count = 0;
-
-		try (Connection conn = getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(
-						"insert into user (name, email, password, gender, join_date) values(?, ?, ?, ?, now(), 'USER')");) {
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getEmail());
-			pstmt.setString(3, vo.getPassword());
-			pstmt.setString(4, vo.getGender());
-
-			count = pstmt.executeUpdate();
-
-			if (count == 0) {
-				System.out.println("Insert failed. No rows affected.");
-			}
-
-		} catch (SQLException e) {
-			System.out.println("error: " + e);
-		}
-
+	public UserRepository(SqlSession sqlSession) {
+		this.sqlSession = sqlSession;
 	}
 
-	private Connection getConnection() throws SQLException {
-		Connection conn = null;
-
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-
-			String url = "jdbc:mariadb://192.168.0.3:3306/webdb";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패: " + e);
-		} catch (SQLException e) {
-			System.out.println("error: " + e);
-		}
-
-		return conn;
+	public void insert(UserVo vo) {
+		sqlSession.insert("user.insert", vo);
 	}
 
 	public UserVo findByEmailAndPassword(String email, String password) {
-
-		UserVo userVo = null;
-
-		try (Connection conn = getConnection();
-				PreparedStatement pstmt = conn
-						.prepareStatement("select id, name, role from user where email=? and password=?");) {
-			pstmt.setString(1, email);
-			pstmt.setString(2, password);
-
-			ResultSet rs = pstmt.executeQuery();
-
-			if (rs.next()) {
-				Long id = rs.getLong(1);
-				String name = rs.getString(2);
-				String role = rs.getString(3);
-
-				userVo = new UserVo();
-				userVo.setId(id);
-				userVo.setName(name);
-				userVo.setRole(role);
-			}
-			rs.close();
-		} catch (SQLException e) {
-			System.out.println("error: " + e);
-		}
-
-		return userVo;
-
+		return sqlSession.selectOne("user.findByEmailAndPassword", Map.of("email", email, "password", password));
 	}
 
 	public UserVo findById(Long id) {
 		UserVo userVo = null;
 
-		try (Connection conn = getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn
 						.prepareStatement("select name, email, gender from user where id=?");
 		) {
@@ -115,38 +65,8 @@ public class UserRepository {
 		return userVo;
 	}
 
-	public void updateUserByEmail(UserVo vo) {
-		
-		try (Connection conn = getConnection();
-				PreparedStatement pstmt1 = conn
-						.prepareStatement("UPDATE user SET name = ?, gender=? WHERE email = ?");
-				PreparedStatement pstmt2 = conn
-						.prepareStatement("UPDATE user SET name = ?, password = ?, gender=? WHERE email = ?");
-		) {
-			int count = 0;
-			if(vo.getPassword() == null || vo.getPassword().length() == 0) {
-				pstmt1.setString(1, vo.getName());
-				pstmt1.setString(2, vo.getGender());
-				pstmt1.setString(3, vo.getEmail());
-
-				count = pstmt1.executeUpdate();
-			} else {
-				pstmt2.setString(1, vo.getName());
-				pstmt2.setString(2, vo.getPassword());
-				pstmt2.setString(3, vo.getGender());
-				pstmt2.setString(4, vo.getEmail());
-
-				count = pstmt2.executeUpdate();
-			}
-
-			if (count < 1) {
-				System.out.println("Update failed. No rows affected.");
-			}
-			
-		} catch (SQLException e) {
-			System.out.println("error: " + e);
-		}
-
+	public void update(UserVo vo) {
+		sqlSession.update("user.update", vo);
 	}
 
 }

@@ -28,15 +28,15 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>		
-					<c:set var="startNumber" value="${totalCount - (currentPage - 1) * pageSize}" />
-					<c:forEach items="${list}" var="vo" varStatus="status">
+					<c:set var="startNumber" value="${data.totalCount - (data.currentPage - 1) * data.pageSize}" />
+					<c:forEach items="${data.list}" var="vo" varStatus="status">
 						<tr>
 							<td>${startNumber-status.index}</td>
 							<td style="text-align:left; padding-left:${vo.depth * 20}px"> <!-- 여기 0자리엔 depth가 들어가함. -->
 							    <c:if test="${vo.depth != 0}">
 							        <img src="${pageContext.request.contextPath}/assets/images/reply.png"/>
 							    </c:if>
-							    <a href="${pageContext.request.contextPath}/board?a=view&id=${vo.id}">${vo.title}</a>
+							    <a href="${pageContext.request.contextPath}/board/view?id=${vo.id}">${vo.title}</a>
 							</td>
 							<td>${vo.userName}</td>
 							<td>${vo.hit}</td>
@@ -49,18 +49,18 @@
 				</table>
 				<div class="pager">
 					<ul>
-						<c:if test="${currentPage > 1}">							
-							<li><a href="?page=${currentPage -1}">◀</a></li>
+						<c:if test="${data.currentPage > 1}">							
+							<li><a href="?page=${data.currentPage -1}">◀</a></li>
 						</c:if>
 						
-						<c:forEach begin="1" end="${totalPages}" var="page">						
-							<li class="${page == currentPage ? 'selected' : ''}">
+						<c:forEach begin="1" end="${data.totalPages}" var="page">						
+							<li class="${page == data.currentPage ? 'selected' : ''}">
 								<a href="?page=${page}">${page}</a>
 							</li>
 						</c:forEach>
 						
-						<c:if test="${currentPage < totalPages}">							
-							<li><a href="?page=${currentPage + 1}">▶</a></li>
+						<c:if test="${data.currentPage < data.totalPages}">							
+							<li><a href="?page=${data.currentPage + 1}">▶</a></li>
 						</c:if>
 						
 					</ul>
@@ -68,7 +68,7 @@
 				
 				<div class="bottom">
 					<c:if test="${not empty authUser}">
-						<a href="${pageContext.request.contextPath}/board?a=writeform" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath}/board/write" id="new-book">글쓰기</a>
 					</c:if>
 				</div>				
 			</div>

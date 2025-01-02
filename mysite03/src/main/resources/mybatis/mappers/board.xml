@@ -1,0 +1,34 @@
+<insert id="insert" parameterType="boardvo">
+		<choose>
+			<when test="groupNo == null">
+				<![CDATA[
+				insert
+				  into board
+				values (null,
+						#{title },
+						#{contents },
+						0,
+						now(),
+						(select ifnull(max(g_no), 0) + 1 from board a ),
+						1,
+						0,
+						#{userNo })
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				insert
+				  into board
+				values (null,
+						#{title },
+						#{contents },
+						0,
+						now(),
+						#{groupNo },
+						#{orderNo },
+						#{depth },
+						#{userNo })				
+				]]>
+			</otherwise>
+		</choose>
+	</insert>

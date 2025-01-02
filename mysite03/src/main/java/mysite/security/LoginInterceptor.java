@@ -43,6 +43,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 		response.sendRedirect(request.getContextPath());
 		
 		/**
+		 * return false의 의미
 		 * 요청 처리가 Interceptor까지만 진행되고 요청을 이후의 Interceptor나 Controller로 전달하지 않음.
 		 * preHandle 내부에서의 작업(예: forward나 redirect)이 실행되기 때문.
 		 * Interceptor 내부에서 필요한 처리(login)를 모두 끝냈기 때문에 이후 요청 흐름이 필요 없고, 동작에 문제가 없음.

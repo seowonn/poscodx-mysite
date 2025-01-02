@@ -27,6 +27,6 @@ public class UserService {
 		}
 
 		public void update(UserVo userVo) {
-			userRepository.updateUserByEmail(userVo);
+			userRepository.update(userVo);
 		}
 }
