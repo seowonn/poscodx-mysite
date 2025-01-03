@@ -14,7 +14,7 @@ import mysite.vo.ReplyBoardVo;
 
 public class BoardDao {
 	
-	private final String SERVER_IP = "192.168.1.12";
+	private final String SERVER_IP = "192.168.0.8";
 
 	public void insert(BoardVo vo) {
 		
@@ -193,7 +193,7 @@ public class BoardDao {
 	    List<BoardVo> result = new ArrayList<>();
 	    
 	    String query = "SELECT b.id, b.title, b.contents, b.hit, b.reg_date, "
-					+ "b.depth, a.name, a.id " 
+					+ "b.g_no, b.o_no, b.depth, a.name, a.id " 
 					+ "FROM board b "
 					+ "JOIN user a ON a.id = b.user_id ";
 	    
@@ -201,9 +201,8 @@ public class BoardDao {
 	    	query += "WHERE b.title LIKE ? OR b.contents LIKE ? ";
 	    }
 	    
-	    query += "LIMIT ? OFFSET ?";
-	    System.out.println("page" + pageSize + " offset: " + offset);
-	    System.out.println(query);
+	    query += "ORDER BY b.g_no DESC, b.o_no LIMIT ? OFFSET ?";
+
 	    try (Connection conn = getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(query)) {
 	    	
@@ -223,9 +222,11 @@ public class BoardDao {
 	                vo.setContents(rs.getString(3));
 	                vo.setHit(rs.getInt(4));
 	                vo.setRegDate(rs.getString(5));
-	                vo.setDepth(rs.getInt(6));
-	                vo.setUserName(rs.getString(7));
-	                vo.setUserId(rs.getLong(8));
+	                vo.setgNo(rs.getInt(6));
+	                vo.setoNo(rs.getInt(7));
+	                vo.setDepth(rs.getInt(8));
+	                vo.setUserName(rs.getString(9));
+	                vo.setUserId(rs.getLong(10));
 	                result.add(vo);
 	            }
 	        }
