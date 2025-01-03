@@ -1,34 +1,55 @@
-<insert id="insert" parameterType="boardvo">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<insert id="insert" parameterType="boardvo">
 		<choose>
-			<when test="groupNo == null">
+			<when test="g_no == null">
 				<![CDATA[
-				insert
-				  into board
-				values (null,
-						#{title },
-						#{contents },
-						0,
-						now(),
-						(select ifnull(max(g_no), 0) + 1 from board a ),
-						1,
-						0,
-						#{userNo })
+				INSERT INTO board
+				VALUES (null, #{title }, #{contents }, 0, now(),
+						(SELECT IFNULL(MAX(g_no), 0) + 1 FROM board a ),
+						1, 0, #{user_id })
 				]]>
 			</when>
 			<otherwise>
 				<![CDATA[
-				insert
-				  into board
-				values (null,
-						#{title },
-						#{contents },
-						0,
-						now(),
-						#{groupNo },
-						#{orderNo },
-						#{depth },
-						#{userNo })				
+				INSERT INTO board
+				VALUES (null, #{title }, #{contents }, 0, now(),
+						#{g_no }, #{o_no }, #{depth }, #{user_id })				
 				]]>
 			</otherwise>
 		</choose>
-	</insert>
+	</insert>	
+	
+	<select id="findByKeyword" resultType="boardvo">
+	    <![CDATA[
+		    SELECT b.id, b.title, b.contents, b.hit, b.reg_date,
+		           b.g_no, b.o_no, b.depth,
+		           a.name, a.id AS user_id
+		    FROM board b
+		    JOIN user a ON a.id = b.user_id
+	    ]]>
+	    <where>
+	    	<if test="keyword != null and keyword.trim().length() > 0">
+	    		(b.title LIKE CONCAT('%', #{keyword}, '%') OR b.contents LIKE CONCAT('%', #{keyword}, '%'))
+	    	</if>
+	    </where>
+	    ORDER BY b.g_no DESC, b.o_no
+	    LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<update id="increaseHit">
+		<![CDATA[
+			UPDATE board SET hit = hit + 1 WHERE id = #{id};
+		]]>
+	</update>
+	
+	<select id="findById" resultType="boardvo">
+		<![CDATA[
+			SELECT id, title, contents, hit, reg_date, g_no, o_no, depth, user_id
+			FROM board WHERE id = #{id};
+		]]>
+	</select>
+	
+</mapper>

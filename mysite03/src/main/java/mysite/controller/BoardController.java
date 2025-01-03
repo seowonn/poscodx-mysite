@@ -34,14 +34,20 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
-	public String getWriteForm() {
-		return "board/write";
+	public String getWriteForm(@RequestParam("id") Long id) {
+		return id == null ? "board/write" : "board/write?id=" + id;
 	}
 	
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write(HttpSession session, BoardVo boardVo) {
+	public String write(@RequestParam("id") Long id, HttpSession session, BoardVo boardVo) {
+		
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		boardVo.setUserId(authUser.getId());
+		
+		if(id != null) {
+			
+		}
+		
 		boardService.addContents(boardVo);
 		return "redirect:/board";
 	}
