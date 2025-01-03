@@ -32,11 +32,11 @@ public class BoardService {
 	}
 	
 	public void updateContents(BoardVo vo) {
-		
+		boardRepository.update(vo);
 	}
 	
 	public void deleteContents(Long id, Long userId) {
-		
+		boardRepository.deleteByIdAndUserId(id, userId);
 	}
 	
 	public Map<String, Object> getContentsList(int currentPage, String keyword) {
@@ -44,6 +44,7 @@ public class BoardService {
 		int offset = (currentPage - 1) * DEFAULT_PAGE_SIZE;
 		
 		List<BoardVo> list = boardRepository.findByKeyword(keyword, DEFAULT_PAGE_SIZE, offset);
+		System.out.println("index0: " + list.get(0).getContents());
 		resultMap.put("list", list);
 		
 		int totalCount = boardRepository.countByKeyword(keyword);

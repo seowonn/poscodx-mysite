@@ -1,6 +1,5 @@
 package mysite.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -64,8 +63,17 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST) 
-	public String update(@PathVariable("id") Long id) {
-		return "board/view?" + id;
+	public String update(@RequestParam("id") Long id, BoardVo boardVo) {
+		boardVo.setId(id);
+		boardService.updateContents(boardVo);
+		return "redirect:/board/view?id=" + id; // 브라우저가 해당 요청을 get로 보내게 된다.
+	}
+	
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public String delete(HttpSession session, @RequestParam("id") Long id) {
+	    UserVo authUser = (UserVo) session.getAttribute("authUser");
+	    boardService.deleteContents(id, authUser.getId());
+	    return "redirect:/board";
 	}
 	
 }

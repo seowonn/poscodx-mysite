@@ -58,10 +58,11 @@ public class BoardRepository {
 		}
 	}
 
-	public void deleteById(Long id) {
+	public void deleteByIdAndUserId(Long id, Long userId) {
 		try (Connection conn = dataSource.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("delete from board where id = ?");) {
+				PreparedStatement pstmt = conn.prepareStatement("delete from board where id = ? AND user_id = ?");) {
 			pstmt.setLong(1, id);
+			pstmt.setLong(2, userId);
 			int count = pstmt.executeUpdate();
 
 			if (count == 0) {
@@ -146,7 +147,7 @@ public class BoardRepository {
 	    List<BoardVo> result = new ArrayList<>();
 	    
 	    String query = "SELECT b.id, b.title, b.contents, b.hit, b.reg_date, "
-					+ "b.depth, a.name, a.id " 
+					+ "b.g_no, b.o_no, b.depth, a.name, a.id " 
 					+ "FROM board b "
 					+ "JOIN user a ON a.id = b.user_id ";
 	    
@@ -154,7 +155,7 @@ public class BoardRepository {
 	    	query += "WHERE b.title LIKE ? OR b.contents LIKE ? ";
 	    }
 	    
-	    query += "LIMIT ? OFFSET ?";
+	    query += "ORDER BY b.g_no DESC, b.o_no LIMIT ? OFFSET ?";
 	    try (Connection conn = dataSource.getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(query)) {
 	    	
@@ -174,9 +175,11 @@ public class BoardRepository {
 	                vo.setContents(rs.getString(3));
 	                vo.setHit(rs.getInt(4));
 	                vo.setRegDate(rs.getString(5));
-	                vo.setDepth(rs.getInt(6));
-	                vo.setUserName(rs.getString(7));
-	                vo.setUserId(rs.getLong(8));
+	                vo.setgNo(rs.getInt(6));
+	                vo.setoNo(rs.getInt(7));
+	                vo.setDepth(rs.getInt(8));
+	                vo.setUserName(rs.getString(9));
+	                vo.setUserId(rs.getLong(10));
 	                result.add(vo);
 	            }
 	        }

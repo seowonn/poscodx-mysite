@@ -22,7 +22,7 @@ public class UserRepository {
 	private DataSource dataSource;
 	
 	private SqlSession sqlSession;
-
+	
 	public UserRepository(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}
