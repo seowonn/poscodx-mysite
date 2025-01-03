@@ -1,10 +1,5 @@
 package mysite.repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -36,33 +31,7 @@ public class UserRepository {
 	}
 
 	public UserVo findById(Long id) {
-		UserVo userVo = null;
-
-		try (Connection conn = dataSource.getConnection();
-				PreparedStatement pstmt = conn
-						.prepareStatement("select name, email, gender from user where id=?");
-		) {
-			pstmt.setLong(1, id);
-
-			ResultSet rs = pstmt.executeQuery();
-
-			if (rs.next()) {
-				String name = rs.getString(1);
-				String email = rs.getString(2);
-				String gender = rs.getString(3);
-				System.out.println(name);
-
-				userVo = new UserVo();
-				userVo.setName(name);
-				userVo.setEmail(email);
-				userVo.setGender(gender);
-			}
-			rs.close();
-		} catch (SQLException e) {
-			System.out.println("error: " + e);
-		}
-
-		return userVo;
+		return sqlSession.selectOne("user.findById", id);
 	}
 
 	public void update(UserVo vo) {
