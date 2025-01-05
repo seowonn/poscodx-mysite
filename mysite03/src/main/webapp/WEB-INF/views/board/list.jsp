@@ -42,7 +42,7 @@
 							<td>${vo.hit}</td>
 							<td>${vo.regDate}</td>
 							<c:if test="${not empty authUser and vo.userId == authUser.id}">
-								<td><a href="${pageContext.request.contextPath}/board/delete?id=${vo.id}" class="del">삭제</a></td>
+								<td><a href="${pageContext.request.contextPath}/board/delete?id=${vo.id}&page=${data.currentPage}" class="del">삭제</a></td>
 							</c:if>
 						</tr>
 					</c:forEach>

@@ -28,7 +28,6 @@ public class BoardController {
 	public String show(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
 		int currentPage = Math.max(1,  page);
 		Map<String, Object> map = boardService.getContentsList(currentPage, "");
-		map.put("currentPage", currentPage);
 	    model.addAttribute("data", map);
 		return "board/list";
 	}
@@ -78,10 +77,13 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public String delete(HttpSession session, @RequestParam("id") Long id) {
+	public String delete(HttpSession session, 
+			@RequestParam("id") Long id,
+			@RequestParam("page") int page
+	) {
 	    UserVo authUser = (UserVo) session.getAttribute("authUser");
 	    boardService.deleteContents(id, authUser.getId());
-	    return "redirect:/board";
+	    return "redirect:/board?page=" + page;
 	}
 	
 }

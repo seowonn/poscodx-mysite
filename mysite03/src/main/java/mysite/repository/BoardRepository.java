@@ -30,19 +30,7 @@ public class BoardRepository {
 	}
 
 	public void deleteByIdAndUserId(Long id, Long userId) {
-//		try (Connection conn = dataSource.getConnection();
-//				PreparedStatement pstmt = conn.prepareStatement("delete from board where id = ? AND user_id = ?");) {
-//			pstmt.setLong(1, id);
-//			pstmt.setLong(2, userId);
-//			int count = pstmt.executeUpdate();
-//
-//			if (count == 0) {
-//				System.out.println("delete failed. No rows affected.");
-//			}
-//
-//		} catch (SQLException e) {
-//			System.out.println("error: " + e);
-//		}
+		sqlSession.delete("board.deleteByIdAndUserId", Map.of("id", id, "userId", userId));
 	}
 
 	public BoardVo findById(Long id) {
