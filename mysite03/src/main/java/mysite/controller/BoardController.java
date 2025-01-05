@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,14 +31,13 @@ public class BoardController {
 		return "board/list";
 	}
 	
-//	@RequestMapping(value = "/write", method = RequestMethod.GET)
-//	public String getNewReplyForm(@RequestParam("id") Long id) {
-//		System.out.println("id: " + id);
-//		return id == null ? "board/write" : "board/write?id=" + id;
-//	}
-	
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
-	public String getNewWriteForm() {
+	public String getNewWriteForm(@RequestParam(value = "id", required = false) Long id,
+			Model model) {
+		if(id != null) {
+			BoardVo parent = boardService.getContents(id);
+			model.addAttribute("parent_board_info", parent);
+		}
 		return "board/write";
 	}
 	
@@ -47,8 +45,6 @@ public class BoardController {
 	public String write(HttpSession session, BoardVo boardVo) {
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		boardVo.setUserId(authUser.getId());
-		Object gNo = session.getAttribute("g_no");
-		boardVo.setgNo(gNo == null ? 0 : Integer.parseInt((String) gNo));
 		boardService.addContents(boardVo);
 		return "redirect:/board";
 	}

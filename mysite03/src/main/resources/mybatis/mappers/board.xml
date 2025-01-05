@@ -16,7 +16,7 @@
 				<![CDATA[
 				INSERT INTO board
 				VALUES (null, #{title }, #{contents }, 0, now(),
-						#{gNo }, #{oNo }, #{depth }, #{userId })				
+						#{gNo }, #{oNo} + 1, #{depth} + 1, #{userId })				
 				]]>
 			</otherwise>
 		</choose>
