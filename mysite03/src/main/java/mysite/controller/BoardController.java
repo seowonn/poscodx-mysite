@@ -33,21 +33,23 @@ public class BoardController {
 		return "board/list";
 	}
 	
+//	@RequestMapping(value = "/write", method = RequestMethod.GET)
+//	public String getNewReplyForm(@RequestParam("id") Long id) {
+//		System.out.println("id: " + id);
+//		return id == null ? "board/write" : "board/write?id=" + id;
+//	}
+	
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
-	public String getWriteForm(@RequestParam("id") Long id) {
-		return id == null ? "board/write" : "board/write?id=" + id;
+	public String getNewWriteForm() {
+		return "board/write";
 	}
 	
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write(@RequestParam("id") Long id, HttpSession session, BoardVo boardVo) {
-		
+	public String write(HttpSession session, BoardVo boardVo) {
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		boardVo.setUserId(authUser.getId());
-		
-		if(id != null) {
-			
-		}
-		
+		Object gNo = session.getAttribute("g_no");
+		boardVo.setgNo(gNo == null ? 0 : Integer.parseInt((String) gNo));
 		boardService.addContents(boardVo);
 		return "redirect:/board";
 	}

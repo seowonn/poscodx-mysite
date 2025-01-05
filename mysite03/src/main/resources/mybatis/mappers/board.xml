@@ -4,19 +4,19 @@
 <mapper namespace="board">
 	<insert id="insert" parameterType="boardvo">
 		<choose>
-			<when test="g_no == null">
+			<when test="gNo == 0">
 				<![CDATA[
 				INSERT INTO board
 				VALUES (null, #{title }, #{contents }, 0, now(),
 						(SELECT IFNULL(MAX(g_no), 0) + 1 FROM board a ),
-						1, 0, #{user_id })
+						1, 0, #{userId })
 				]]>
 			</when>
 			<otherwise>
 				<![CDATA[
 				INSERT INTO board
 				VALUES (null, #{title }, #{contents }, 0, now(),
-						#{g_no }, #{o_no }, #{depth }, #{user_id })				
+						#{gNo }, #{oNo }, #{depth }, #{userId })				
 				]]>
 			</otherwise>
 		</choose>
