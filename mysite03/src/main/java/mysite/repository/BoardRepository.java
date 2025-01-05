@@ -74,33 +74,7 @@ public class BoardRepository {
 	}
 	
 	public int countByKeyword(String keyword) {
-		int count = 0;
-//		String selectQuery;
-//		
-//		if(keyword == null || keyword.length() == 0) {
-//			selectQuery = "SELECT COUNT(*) FROM board";
-//		} else {
-//			selectQuery = "SELECT COUNT(*) FROM board b WHERE b.contents LIKE ? OR b.title LIKE ?";
-//		}
-//		
-//		try (Connection conn = dataSource.getConnection();
-//				PreparedStatement pstmt = conn.prepareStatement(selectQuery);
-//		) {
-//			if(keyword != null && keyword.length() != 0) {				
-//				pstmt.setString(1, "%" + keyword + "%");
-//				pstmt.setString(2, "%" + keyword + "%");
-//			}
-//			
-//			ResultSet rs = pstmt.executeQuery();
-//			if(rs.next()) {
-//				count = rs.getInt(1);
-//			}
-//			rs.close();
-//		} catch (SQLException e) {
-//			System.out.println("error: " + e);
-//		}
-//		
-		return count;
+		return sqlSession.selectOne("board.countByKeyword", keyword);
 	}
 
 }

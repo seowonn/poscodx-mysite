@@ -52,4 +52,25 @@
 		]]>
 	</select>
 	
+	<!-- resultType은 쿼리의 반환 결과의 타입(형식)을 명시해준다. -->
+	<select id="countByKeyword" resultType="int">
+		<choose>
+			<when test="keyword == null or keyword.length() == 0">
+				<![CDATA[
+					SELECT COUNT(*) FROM board
+				]]>
+			</when>
+			<otherwise>
+			<!-- MyBatis에서 연결 표현은 CONCAT을 사용한다. -->
+			<!-- CDATA는 XML에서 Character Data 섹션을 의미하며, 
+				XML 파서가 섹션 내부의 내용을 텍스트 데이터 그대로 처리하도록 지정해준다. -->
+				<![CDATA[
+					SELECT COUNT(*) FROM board b 
+					WHERE b.contents LIKE CONCAT('%', #{keyword}, '%')
+						OR b.title LIKE CONCAT('%', #{keyword}, '%')
+				]]>
+			</otherwise>
+		</choose>
+	</select>
+	
 </mapper>
