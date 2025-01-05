@@ -1,6 +1,6 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="jakarta.tags.core" prefix="c"%>
+<%@ taglib uri="jakarta.tags.fmt" prefix="fmt"%>
+<%@ taglib uri="jakarta.tags.functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,59 +14,33 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<c:choose>
-					<c:when test="${not empty param.id}">
-						<form class="board-form" method="post" action="${pageContext.request.contextPath}/board">
-							<input type = "hidden" name = "a" value="write">
-							<input type = "hidden" name = "g_no" value="${parent_board_info.gNo}">
-							<input type = "hidden" name = "o_no" value="${parent_board_info.oNo}">
-							<input type = "hidden" name = "depth" value="${parent_board_info.depth}">
-							<table class="tbl-ex">
-								<tr>
-									<th colspan="2">글쓰기</th>
-								</tr>
-								<tr>
-									<td class="label">제목</td>
-									<td><input type="text" name="title" value=""></td>
-								</tr>
-								<tr>
-									<td class="label">내용</td>
-									<td>
-										<textarea id="content" name="content"></textarea>
-									</td>
-								</tr>
-							</table>
-							<div class="bottom">
-								<a href="${pageContext.request.contextPath}/board">취소</a>
-								<input type="submit" value="등록">
-							</div>
-						</form>	
-					</c:when>
-					<c:otherwise>
-						<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/write">
-							<table class="tbl-ex">
-								<tr>
-									<th colspan="2">글쓰기</th>
-								</tr>
-								<tr>
-									<td class="label">제목</td>
-									<td><input type="text" name="title" value=""></td>
-								</tr>
-								<tr>
-									<td class="label">내용</td>
-									<td>
-										<textarea id="content" name="contents"></textarea>
-									</td>
-								</tr>
-							</table>
-							<div class="bottom">
-								<a href="${pageContext.request.contextPath}/board">취소</a>
-								<input type="submit" value="등록">
-							</div>
-						</form>	
-					</c:otherwise>
-				</c:choose>
-							
+				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/write">
+					<c:if test="${not empty parent_board_info}">
+						<input type = "hidden" name = "gNo" value="${parent_board_info.gNo}">
+						<input type = "hidden" name = "oNo" value="${parent_board_info.oNo}">
+						<input type = "hidden" name = "depth" value="${parent_board_info.depth}">
+					</c:if>
+					
+					<table class="tbl-ex">
+						<tr>
+							<th colspan="2">글쓰기</th>
+						</tr>
+						<tr>
+							<td class="label">제목</td>
+							<td><input type="text" name="title" value=""></td>
+						</tr>
+						<tr>
+							<td class="label">내용</td>
+							<td>
+								<textarea id="content" name="contents"></textarea>
+							</td>
+						</tr>
+					</table>
+					<div class="bottom">
+						<a href="${pageContext.request.contextPath}/board">취소</a>
+						<input type="submit" value="등록">
+					</div>
+				</form>		
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/includes/navigation.jsp"/>

@@ -22,6 +22,9 @@
 	<!-- DefaultServlet Handler -->	
 	<mvc:default-servlet-handler />
 	
+	<!-- mvc url-resource mapping -->
+	<mvc:resources mapping="/assests/upload-images/**" location="file:/mysite-uploads"/>
+	
 	<!-- Interceptors -->
 	<mvc:interceptors>
 		<mvc:interceptor>
@@ -50,5 +53,5 @@
 	</bean>
 		
 	<context:annotation-config />
-	<context:component-scan base-package="mysite.controller, mysite.exception" />
+	<context:component-scan base-package="mysite" />
 </beans>

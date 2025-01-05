@@ -39,7 +39,7 @@
 					    <a href="${pageContext.request.contextPath}/board/update?id=${vo.id}">글수정</a>
 					</c:if>
 					<c:if test="${not empty authUser}">
-						<a href="${pageContext.request.contextPath}/board/write&id=${vo.id}">답글달기</a>
+						<a href="${pageContext.request.contextPath}/board/write?id=${vo.id}">답글달기</a>
 					</c:if>
 				</div>
 			</div>

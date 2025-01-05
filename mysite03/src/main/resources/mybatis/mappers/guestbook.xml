@@ -3,15 +3,14 @@
 
 <mapper namespace="guestbook">
 	<select id="findAll" resultType="guestbookvo">
-		<![CDATA[
-		select  id,
-				name,
-				contents,
-				date_format(reg_date, '%Y-%m-%d %h:%i:%s')
-			from guestbook
-		where id < 10 and 20 > id
-		order by reg_date desc
-		]]>
+	    <![CDATA[
+	    SELECT id,
+	           name,
+	           contents,
+	           DATE_FORMAT(reg_date, '%Y-%m-%d %H:%i:%s') AS reg_date
+	    FROM guestbook
+	    ORDER BY reg_date DESC
+	    ]]>
 	</select>
 
 	<insert id="insert" parameterType="guestbookvo">
