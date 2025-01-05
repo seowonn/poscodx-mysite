@@ -58,9 +58,21 @@
 		]]>
 	</update>
 	
+	<update id="updateBoard">
+		<![CDATA[
+			UPDATE board SET title=#{title},
+			contents=#{contents}
+			WHERE id=#{id}
+		]]>
+	</update>
+	
+	<!-- camelCase 불일치를 alias로 해결 -->
 	<select id="findById" resultType="boardvo">
 		<![CDATA[
-			SELECT id, title, contents, hit, reg_date, g_no, o_no, depth, user_id
+			SELECT id, title, contents, hit, 
+			reg_date as regDate, 
+			g_no as gNo, o_no as oNo, depth, 
+			user_id as userId
 			FROM board WHERE id = #{id};
 		]]>
 	</select>

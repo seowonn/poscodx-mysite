@@ -1,15 +1,7 @@
 package mysite.repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -39,22 +31,7 @@ public class BoardRepository {
 	}
 
 	public void update(BoardVo vo) {
-//		try (Connection conn = dataSource.getConnection();
-//				PreparedStatement pstmt = conn.prepareStatement("update board "
-//						+ "set title=?, contents=? where id = ?");
-//		) {
-//			pstmt.setString(1, vo.getTitle());
-//			pstmt.setString(2, vo.getContents());
-//			pstmt.setLong(3, vo.getId());
-//			int count = pstmt.executeUpdate();
-//
-//			if (count == 0) {
-//				System.out.println("update failed. No rows affected.");
-//			}
-//
-//		} catch (SQLException e) {
-//			System.out.println("error: " + e);
-//		}
+		sqlSession.update("board.updateBoard", vo);
 	}
 	
 	public List<BoardVo> findByKeyword(String keyword, int pageSize, int offset) {
