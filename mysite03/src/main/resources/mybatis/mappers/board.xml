@@ -22,7 +22,20 @@
 		</choose>
 	</insert>	
 	
-	<select id="findByKeyword" resultType="boardvo">
+	<resultMap id="boardMap" type="boardvo">
+		<id property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="contents" column="contents"/>
+		<result property="hit" column="hit"/>
+		<result property="regDate" column="reg_date"/>
+		<result property="gNo" column="g_no"/>
+		<result property="oNo" column="o_no"/>
+		<result property="depth" column="depth"/>
+		<result property="userName" column="name"/>
+		<result property="userId" column="user_id"/>
+	</resultMap>
+	
+	<select id="findByKeyword" resultMap="boardMap">
 	    <![CDATA[
 		    SELECT b.id, b.title, b.contents, b.hit, b.reg_date,
 		           b.g_no, b.o_no, b.depth,

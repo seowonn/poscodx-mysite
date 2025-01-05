@@ -5,6 +5,7 @@
 		<typeAlias type="mysite.vo.GuestbookVo" alias="guestbookvo"></typeAlias>
 		<typeAlias type="mysite.vo.UserVo" alias="uservo"></typeAlias>
 		<typeAlias type="mysite.vo.BoardVo" alias="boardvo"></typeAlias>
+		<typeAlias type="mysite.vo.BoardVo" alias="boardMap"></typeAlias>
 	 </typeAliases>
 	 
 	<mappers>
