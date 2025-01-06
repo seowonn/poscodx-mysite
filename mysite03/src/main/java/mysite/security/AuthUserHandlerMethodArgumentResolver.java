@@ -16,7 +16,6 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 //	여기 파라미터에 모든 정보가 다 들어옴
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		System.out.println("컨트롤러 매개변수 분해중");
 		AuthUser authUser = parameter.getParameterAnnotation(AuthUser.class);
 		
 		// @AuthUser가 안 붙어있으면

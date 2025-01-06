@@ -31,7 +31,6 @@ public class AuthInterceptor implements HandlerInterceptor{
 			auth = handlerMethod.getBeanType().getAnnotation(Auth.class);
 		}
 		
-		System.out.println("auth: " + auth);
 		// 5. 그럼에도 @Auth가 없을 경우 
 		if(auth == null) { // 인증이 필요 없는 경우
 			return true;
@@ -40,7 +39,6 @@ public class AuthInterceptor implements HandlerInterceptor{
 		// 6. @Auth가 붙어 있기 때문에 인증(Authentication) 여부 확인 가능
 		// 7. 세션에 있는 role이랑 판단해줘야 함
 		String role = auth.role();
-		System.out.println("role: " + role);
 		
 		HttpSession session = request.getSession();
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
