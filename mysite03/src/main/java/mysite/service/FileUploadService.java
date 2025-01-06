@@ -14,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileUploadService {
 	
 	// 저장 디렉토리
-	private static final String SAVE_PATH = "/mysite-uploads";
-	private static final String URL = "/assets/upload-images";
+	private static final String SAVE_PATH = "C:/PoscoDX_9기/mysite/mysite-uploads"; // 서버 (가상 com)에 저장되는 경로
+	private static final String URL = "/assets/upload-images"; // 클라이언트가 접근하는 경로
 
 	public String restore(MultipartFile file) throws RuntimeException {
 		

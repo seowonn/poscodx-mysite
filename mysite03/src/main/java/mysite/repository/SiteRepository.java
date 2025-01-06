@@ -19,7 +19,7 @@ public class SiteRepository {
 	}
 	
 	public void update(SiteVo siteVo) {
-//		sqlSession.update("site.update", siteVo);
+		sqlSession.update("site.update", siteVo);
 	}
 
 }

@@ -38,7 +38,10 @@
 	</bean>
 	
 	<!-- mvc url-resource mapping -->
-	<mvc:resources mapping="/assests/upload-images/**" location="file:/mysite-uploads"/>
+	<mvc:resources mapping="/assets/upload-images/**" location="file:C:/PoscoDX_9기/mysite/mysite-uploads/"/>
+	
+	<!-- Multipart Resolver -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
 	
 	<!-- Interceptors -->
 	<mvc:interceptors>
