@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="site">
+	<select id="find" resultType="sitevo">
+		<!-- 가장 처음 사이트 정보 한 개만 로드 되게 설정 -->
+		<![CDATA[
+			SELECT id, title, welcome, profile, description
+			FROM site
+			ORDER BY id ASC
+			LIMIT 1
+		]]>
+	</select>
+
+</mapper>

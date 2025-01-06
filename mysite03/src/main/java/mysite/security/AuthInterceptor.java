@@ -31,6 +31,7 @@ public class AuthInterceptor implements HandlerInterceptor{
 			auth = handlerMethod.getBeanType().getAnnotation(Auth.class);
 		}
 		
+		System.out.println("auth: " + auth);
 		// 5. 그럼에도 @Auth가 없을 경우 
 		if(auth == null) { // 인증이 필요 없는 경우
 			return true;
@@ -39,6 +40,7 @@ public class AuthInterceptor implements HandlerInterceptor{
 		// 6. @Auth가 붙어 있기 때문에 인증(Authentication) 여부 확인 가능
 		// 7. 세션에 있는 role이랑 판단해줘야 함
 		String role = auth.role();
+		System.out.println("role: " + role);
 		
 		HttpSession session = request.getSession();
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
@@ -47,19 +49,25 @@ public class AuthInterceptor implements HandlerInterceptor{
 			response.sendRedirect(request.getContextPath() + "/user/login");
 			return false;
 		}
+		System.out.println("auth: " + authUser.getRole());
 		
 		//8. @Auth의 role이 "USER"인 경우, authUser의 role은 "USER" 또는 "ADMIN" 이던 상관없다.
 		if("USER".equals(role)) {
+			System.out.println("user 임: " + role);
 			return true;
 		}
 		
-		// 9. ADMIN은 ADMIN만 접근 가능하다.
+		/**
+		 * 9. ADMIN은 ADMIN만 접근 가능하다.
+		 * 즉, USER role이 ADMIN 경로에 접근 시 기본 path로 redirect 된다. 
+		 */
 		if (!"ADMIN".equals(authUser.getRole())) {
 		    response.sendRedirect(request.getContextPath());
 		    return false;
 		}
 		
 		// 5. @Auth가 붙어 있고 인증도 된 경우 + ADMIN인 경우 == 더 이상 처리가 필요없는 상태
+		System.out.println("여기 걸림");
 		return true;
 	}
 

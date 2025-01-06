@@ -52,6 +52,13 @@
 		</mvc:interceptor>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/user/auth"/>
+			<mvc:exclude-mapping path="/user/logout"/>
+			<mvc:exclude-mapping path="/assets/**"/>
+			<bean class="mysite.security.AuthInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/assets/**"/>
 			<bean class="mysite.interceptor.SiteInterceptor" />
 		</mvc:interceptor>
