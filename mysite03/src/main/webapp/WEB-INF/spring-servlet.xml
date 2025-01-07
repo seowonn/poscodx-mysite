@@ -11,6 +11,8 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	
+	<aop:aspectj-autoproxy/>
+	
 	<!-- Validator, ConversionService, MessageConverter를 자동으로 등록 -->
 	<mvc:annotation-driven>
 		<!-- Argument Resolvers -->

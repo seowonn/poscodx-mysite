@@ -2,19 +2,13 @@ package mysite.repository;
 
 import java.util.Map;
 
-import javax.sql.DataSource;
-
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import mysite.vo.UserVo;
 
 @Repository
 public class UserRepository {
-	
-	@Autowired
-	private DataSource dataSource;
 	
 	private SqlSession sqlSession;
 	
@@ -26,8 +20,9 @@ public class UserRepository {
 		sqlSession.insert("user.insert", vo);
 	}
 
-	public UserVo findByEmailAndPassword(String email, String password) {
-		return sqlSession.selectOne("user.findByEmailAndPassword", Map.of("email", email, "password", password));
+	public UserVo findByEmailAndPassword(String email, String password) {		
+		UserVo userVo = sqlSession.selectOne("user.findByEmailAndPassword", Map.of("email", email, "password", password));		
+		return userVo;
 	}
 
 	public UserVo findById(Long id) {
