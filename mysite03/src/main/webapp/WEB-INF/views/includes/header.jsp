@@ -39,7 +39,8 @@
 	}); // call back 함수: 바로 실행되지 않고 호출이 되면 실행되는 함수
 </script>
 	<div id="header">
-		<h1>${siteVo.title}</h1>
+		<!-- ${siteVo.title }: ServletContext의 site에 접근하는 경우 -->
+		<h1>${site.title}</h1> <!-- JSP에서 Bean에 접근하여 정보를 가져오는 경우 -->
 		<div id="languages">
 			<c:choose>
 				<c:when test="${lang == 'en' }">

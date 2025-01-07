@@ -1,5 +1,7 @@
 package mysite.controller;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +22,14 @@ public class AdminController {
 	private final FileUploadService fileUploadService;
 	private final SiteService siteService;
 	private final ServletContext servletContext;
+	private final ApplicationContext applicationContext;
 	
-	public AdminController(FileUploadService fileUploadService, SiteService siteService, ServletContext servletContext) {
+	public AdminController(FileUploadService fileUploadService, SiteService siteService, 
+			ServletContext servletContext, ApplicationContext applicationContext) {
 		this.fileUploadService = fileUploadService;
 		this.siteService = siteService;
 		this.servletContext = servletContext;
+		this.applicationContext = applicationContext;
 	}
 	
 	@RequestMapping({"", "/main"})
@@ -41,8 +46,13 @@ public class AdminController {
 		}
 		
 		siteService.updateSite(siteVo);
-		// 이후 업데이트한 title로 ServletContext에 등록된 siteVo를 바꿔줘야됨.
+		// 이후 업데이트한 title로 ServletContext에 등록된 siteVo를 바꿔줘야됨.: Servlet Context Bean
 		servletContext.setAttribute("siteVo", siteVo);
+		
+		// update application context bean
+		SiteVo site = applicationContext.getBean(SiteVo.class);
+		BeanUtils.copyProperties(siteVo, site);
+		
 		return "redirect:/admin";
 	}
 

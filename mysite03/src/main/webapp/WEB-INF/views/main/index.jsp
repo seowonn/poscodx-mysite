@@ -15,7 +15,7 @@
 		<div id="wrapper">
 			<div id="content">
 				<div id="site-introduction">
-					<img id="profile" src="${pageContext.request.contextPath}/assets/images/myProfile.png" width="150">
+					<img id="profile" src="${pageContext.request.contextPath }${site.profile }" width="150">
 					<c:choose>
 						<c:when test="${empty authUser}">
 							<h2>안녕하세요. mysite에 오신 것을 환영합니다.</h2>

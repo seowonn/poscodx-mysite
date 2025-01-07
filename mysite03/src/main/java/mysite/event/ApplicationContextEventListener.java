@@ -1,11 +1,16 @@
 package mysite.event;
 
+import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 
 import mysite.service.SiteService;
+import mysite.vo.SiteVo;
 
 /**
  * 이벤트 핸들러: 스프링 컨텍스트가 초기화되거나 리프레시될 때 발생하는 이벤트
@@ -19,6 +24,20 @@ public class ApplicationContextEventListener {
 	@EventListener({ContextRefreshedEvent.class})
 	public void handlerContextRefreshedEvent() {
 		SiteService siteService = applicationContext.getBean(SiteService.class);
-		System.out.println("-- Context Refreshed Event Received --" + siteService);		
+		SiteVo vo = siteService.getSite();
+		
+		MutablePropertyValues propertyValues = new MutablePropertyValues();
+		propertyValues.add("title", vo.getTitle());
+		propertyValues.add("welcome", vo.getWelcome());
+		propertyValues.add("description", vo.getDescription());
+		propertyValues.add("profile", vo.getProfile());
+		
+		GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
+		beanDefinition.setBeanClass(SiteVo.class);
+		beanDefinition.setPropertyValues(propertyValues);
+
+		BeanDefinitionRegistry registry = (BeanDefinitionRegistry)applicationContext.getAutowireCapableBeanFactory();
+		registry.registerBeanDefinition("site", beanDefinition);
 	}
+	
 }
