@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 import mysite.security.Auth;
 import mysite.service.FileUploadService;
 import mysite.service.SiteService;
@@ -17,10 +19,12 @@ import mysite.vo.SiteVo;
 public class AdminController {
 	private final FileUploadService fileUploadService;
 	private final SiteService siteService;
+	private final ServletContext servletContext;
 	
-	public AdminController(FileUploadService fileUploadService, SiteService siteService) {
+	public AdminController(FileUploadService fileUploadService, SiteService siteService, ServletContext servletContext) {
 		this.fileUploadService = fileUploadService;
 		this.siteService = siteService;
+		this.servletContext = servletContext;
 	}
 	
 	@RequestMapping({"", "/main"})
@@ -37,6 +41,8 @@ public class AdminController {
 		}
 		
 		siteService.updateSite(siteVo);
+		// 이후 업데이트한 title로 ServletContext에 등록된 siteVo를 바꿔줘야됨.
+		servletContext.setAttribute("siteVo", siteVo);
 		return "redirect:/admin";
 	}
 

@@ -4,7 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- JSP에는 내부적으로 HttpSession session = request.getSession(true); 가 삽입되어 있다. -->
-	<script>
+<script>
 	// 브라우저가 내장한 객체로, JS에서 접근 가능하다.
 	console.log("hello");
 	
@@ -39,7 +39,7 @@
 	}); // call back 함수: 바로 실행되지 않고 호출이 되면 실행되는 함수
 </script>
 	<div id="header">
-		<h1>MySite</h1>
+		<h1>${siteVo.title}</h1>
 		<div id="languages">
 			<c:choose>
 				<c:when test="${lang == 'en' }">
