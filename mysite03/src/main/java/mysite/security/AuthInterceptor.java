@@ -43,15 +43,14 @@ public class AuthInterceptor implements HandlerInterceptor{
 		HttpSession session = request.getSession();
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		
+		// 비회원이 url로 접근하는 경우 로그인 페이지로 리다이렉트
 		if(authUser == null) {
 			response.sendRedirect(request.getContextPath() + "/user/login");
 			return false;
 		}
-		System.out.println("auth: " + authUser.getRole());
 		
 		//8. @Auth의 role이 "USER"인 경우, authUser의 role은 "USER" 또는 "ADMIN" 이던 상관없다.
 		if("USER".equals(role)) {
-			System.out.println("user 임: " + role);
 			return true;
 		}
 		
@@ -65,7 +64,6 @@ public class AuthInterceptor implements HandlerInterceptor{
 		}
 		
 		// 5. @Auth가 붙어 있고 인증도 된 경우 + ADMIN인 경우 == 더 이상 처리가 필요없는 상태
-		System.out.println("여기 걸림");
 		return true;
 	}
 
