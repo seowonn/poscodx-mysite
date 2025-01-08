@@ -14,7 +14,7 @@ import mysite.vo.ReplyBoardVo;
 
 public class BoardDao {
 	
-	private final String SERVER_IP = "192.168.0.8";
+	private final String SERVER_IP = "192.168.0.17";
 
 	public void insert(BoardVo vo) {
 		
