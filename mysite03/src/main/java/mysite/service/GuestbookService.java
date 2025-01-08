@@ -19,6 +19,10 @@ public class GuestbookService {
 		this.guestbookRepository = guestbookRepository;
 		this.guestbookLogRepository = guestbookLogRepository;
 	}
+	
+	public GuestbookVo findById(Long id) {
+		return guestbookRepository.findById(id);
+	}
 
 	public List<GuestbookVo> getContentsList() {
 		return guestbookRepository.findAll();
@@ -26,11 +30,23 @@ public class GuestbookService {
 	
 	@Transactional
 	public void deleteContents(Long id, String password) {
-		guestbookRepository.deleteByIdAndPassword(id, password);
+		GuestbookVo vo = guestbookRepository.findById(id);
+		if(vo == null) {
+			return;
+		}
+		
+		int count = guestbookRepository.deleteByIdAndPassword(id, password);
+		if(count == 1) {
+			guestbookLogRepository.updateByRegDate(vo.getRegDate());
+		}
 	}
 	
 	@Transactional
-	public boolean addContents(GuestbookVo vo) {
-		return guestbookRepository.insert(vo) > 0 ? true : false;
+	public void addContents(GuestbookVo vo) {
+		int count = guestbookLogRepository.update();
+		if(count == 0) {
+			guestbookLogRepository.insert();
+		}
+		guestbookRepository.insert(vo);
 	}
 }

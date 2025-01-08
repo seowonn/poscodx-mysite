@@ -28,6 +28,8 @@ public class GuestbookController {
 		return "guestbook/list";
 	}
 	
+	
+	
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String delete(@RequestParam("id") Long id) {
 		return "guestbook/delete";
@@ -42,10 +44,8 @@ public class GuestbookController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String add(GuestbookVo guestbookVo) {
-		boolean success = guestbookService.addContents(guestbookVo);
-		if(!success) {
-			return "errors/500";
-		}
+		guestbookService.addContents(guestbookVo);
+
 //		redirect는 클라이언트가 새로운 요청을 하게 만듦으로써 이전 데이터를 재사용하지 않는다.
 		return "redirect:/guestbook";
 	}
