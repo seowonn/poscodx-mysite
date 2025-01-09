@@ -21,8 +21,11 @@ public class UserRepository {
 	}
 
 	public UserVo findByEmailAndPassword(String email, String password) {		
-		UserVo userVo = sqlSession.selectOne("user.findByEmailAndPassword", Map.of("email", email, "password", password));		
-		return userVo;
+		return sqlSession.selectOne("user.findByEmailAndPassword", Map.of("email", email, "password", password));		
+	}
+	
+	public UserVo findByEmail(String email) {
+		return sqlSession.selectOne("user.findByEmail", email);
 	}
 
 	public UserVo findById(Long id) {
@@ -32,5 +35,5 @@ public class UserRepository {
 	public void update(UserVo vo) {
 		sqlSession.update("user.update", vo);
 	}
-
+	
 }

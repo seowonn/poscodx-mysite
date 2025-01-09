@@ -21,6 +21,10 @@ public class UserService {
 		public UserVo getUser(String email, String password) {
 			return userRepository.findByEmailAndPassword(email, password);
 		}
+		
+		public UserVo getUser(String email) {
+			return userRepository.findByEmail(email);
+		}
 
 		public UserVo getUser(Long id) {
 			return userRepository.findById(id);
@@ -29,4 +33,5 @@ public class UserService {
 		public void update(UserVo userVo) {
 			userRepository.update(userVo);
 		}
+		
 }
