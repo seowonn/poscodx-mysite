@@ -12,7 +12,7 @@ import mysite.vo.GuestbookVo;
 
 public class GuestbookDao {
 	
-	private final String SERVER_IP = "192.168.1.17";
+	private final String SERVER_IP = "192.168.0.17";
 
 	public List<GuestbookVo> findAll() {
 		List<GuestbookVo> result = new ArrayList<>();

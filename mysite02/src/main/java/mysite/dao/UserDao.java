@@ -10,7 +10,7 @@ import mysite.vo.UserVo;
 
 public class UserDao {
 	
-	private final String SERVER_IP = "192.168.1.17";
+	private final String SERVER_IP = "192.168.0.17";
 
 	public void insert(UserVo vo) {
 		int count = 0;
