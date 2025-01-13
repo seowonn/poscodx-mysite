@@ -22,7 +22,7 @@ import mysite.vo.UserVo;
 public class UserController {
 
 	private UserService userService;
-	
+
 	public UserController(UserService userService) {
 		this.userService = userService;
 	}
@@ -33,8 +33,9 @@ public class UserController {
 	}
 
 	@PostMapping("/join")
-	public String join(@ModelAttribute @Valid UserVo userVo, BindingResult result, Model model) {
-		if(result.hasErrors()) {
+	public String join(@ModelAttribute @Valid UserVo userVo, BindingResult result,
+			Model model) {
+		if (result.hasErrors()) {
 			Map<String, Object> map = result.getModel();
 			model.addAllAttributes(map);
 			return "user/join";
@@ -48,38 +49,38 @@ public class UserController {
 		return "user/joinsuccess";
 	}
 
-	@RequestMapping(value="/login", method=RequestMethod.GET)
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login() {
 		return "user/login";
 	}
-	
+
 	@Auth
-	@RequestMapping(value="/update", method=RequestMethod.GET)
+	@RequestMapping(value = "/update", method = RequestMethod.GET)
 	public String update(@AuthUser UserVo authUser, Model model) {
 		UserVo userVo = userService.getUser(authUser.getId());
-		
+
 		model.addAttribute("vo", userVo);
 		return "user/update";
 	}
 
 	@Auth
-	@RequestMapping(value="/update", method=RequestMethod.POST)
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(@AuthUser UserVo authUser, UserVo userVo) {
 		userVo.setId(authUser.getId());
 		userService.update(userVo);
-		
+
 		authUser.setName(userVo.getName());
 		return "redirect:/user/update";
 	}
-	
+
 	@RequestMapping("/auth")
 	public void auth() {
-		
+
 	}
-	
+
 	@RequestMapping("/logout")
 	public void logout() {
-		
+
 	}
-	
+
 }

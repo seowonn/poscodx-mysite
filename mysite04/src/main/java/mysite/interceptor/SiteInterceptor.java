@@ -20,19 +20,13 @@ public class SiteInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 			Object handler) throws Exception {
-		System.out.println("인터셉터 입장");
 		/**
 		 * 인터셉터로 메서드 분리, request scope에 저장의 단점(매 요청 시마다 getSite 쿼리 발생) 보완을 위해 1. request
 		 * 보다 더 넓은 범위인 ServletContext에 siteVo 저장 2. null인 경우에만 조회 쿼리 발생
 		 */
 		SiteVo siteVo = (SiteVo) request.getServletContext().getAttribute("siteVo");
 		if (siteVo == null) {
-			System.out.println("Sfsadfdsf");
 			siteVo = siteService.getSite();
-			System.out.println(siteVo.getDescription());
-			System.out.println(siteVo.getTitle());
-			System.out.println(siteVo.getProfile());
-			System.out.println(siteVo.getWelcome());
 			request.getServletContext().setAttribute("siteVo", siteVo);
 		}
 

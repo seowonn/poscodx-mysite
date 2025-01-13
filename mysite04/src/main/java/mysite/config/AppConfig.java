@@ -15,6 +15,6 @@ import mysite.config.app.MyBatisConfig;
 //기존 applicationContext의 Transaction AOP Proxy(<tx:annotation-driven/>) 부분을 어노테이션으로 작성
 @EnableTransactionManagement
 @Import({DBConfig.class, MyBatisConfig.class})
-@ComponentScan(basePackages = {"mysite.service, mysite.repository, mysite.aspect"})
+@ComponentScan(basePackages = {"mysite.service", "mysite.repository", "mysite.aspect"})
 public class AppConfig {
 }

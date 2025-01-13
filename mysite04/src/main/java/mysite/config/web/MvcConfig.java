@@ -82,6 +82,7 @@ public class MvcConfig implements WebMvcConfigurer {
 		return new ApplicationContextEventListener();
 	}
 
+	@Bean
 	// Interceptors
 	public HandlerInterceptor siteInterceptor() {
 		return new SiteInterceptor();
