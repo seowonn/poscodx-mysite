@@ -33,7 +33,7 @@ public class AdminController {
 	
 	@RequestMapping({"", "/main"})
 	public String main(Model model) {
-		model.addAttribute("siteVo", siteService.getSite());
+//		model.addAttribute("siteVo", siteService.getSite());
 		return "admin/main";
 	}
 	

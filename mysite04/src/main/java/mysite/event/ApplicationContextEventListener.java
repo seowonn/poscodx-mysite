@@ -22,6 +22,8 @@ public class ApplicationContextEventListener {
 
 	@EventListener({ContextRefreshedEvent.class})
 	public void handlerContextRefreshedEvent() {
+		System.out.println("-- Context Refreshed Event Received --");
+		
 		SiteService siteService = applicationContext.getBean(SiteService.class);
 		SiteVo vo = siteService.getSite();
 		
