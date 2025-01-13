@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
 		// html 요청: request header의 accept: application/json (x)
 		String accept = request.getHeader("accept");
 
-		if (accept.matches("")) {
+		if (accept.matches(".*application/json.*")) {
 			// 3. JSON 응답
 
 		} else {
