@@ -25,7 +25,12 @@
 				type: "get",
 				dataType: "json",
 				success: function(response) {
-					if(response.exist) {
+					if(response.result != "success") {
+						console.error(reponse.message);
+						return;
+					}
+					
+					if(response.data.exists) {
 						alert("이메일이 존재합니다. 다른 이메일을 사용해 주세요.");
 						$("#email").val("");
 						$("#email").focus();
@@ -33,7 +38,11 @@
 						return;
 					}
 					
-					
+					$("#img-check").show();
+					$("#btn-check").hide();
+				},
+				error: function(xhr, status, err) {
+					console.error(err);
 				}
 			});
 		});
