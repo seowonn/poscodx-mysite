@@ -1,0 +1,36 @@
+[src/main/java]
+	com
+	 |--- poscodx
+	 |	|--- mysite	
+	 |	|	|--- config
+	 |	|	|	|--- AppConfig.java // applicationContext 역할
+	 |	|	|	|--- WebConfig.java // spring-servlet.xml 역할
+	 |	|	|	|--- app
+	 |	|	|	|	|--- DBConfig.java
+	 |	|	|	|	|--- MyBatisConfig.java
+	 |	|	|	|--- web
+	 |	|	|	|	|--- MvcConfig.java
+	 |	|	|	|	|--- SecurityConfig.java
+	 |	|	|	|	|--- LocaleConfig.java
+	 |	|	|	|	|--- FileuploadConfig.java
+	 |	|	|--- controller
+	 |	|	|--- service
+	 |	|	|--- repository
+
+[src/main/resources]
+	com
+	 |--- poscodx
+	 |	|--- mysite
+	 |	|	|--- config
+	 |      |	|	|--- app
+	 |      |	|	|	|--- jdbc.properties
+	 |      |	|	|	|--- mybatis
+	 |      |	|	|		|--- configuration.xml
+	 |      |	|	|		|--- mappers
+	 |      |	|	|		|	|--- board.xml
+	 |      |	|	|		|	|--- user.xml
+	 |      |	|	|--- web
+	 |      |	|	|	|--- fileupload.properties
+	 |      |	|	|	|--- messages
+	 |      |	|	|	|	|--- message_ko.properties
+	 |      |	|	|	|	|--- message_en.properties

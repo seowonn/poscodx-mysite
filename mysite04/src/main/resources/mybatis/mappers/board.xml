@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<insert id="insert" parameterType="boardvo">
+		<choose>
+			<when test="gNo == 0">
+				<![CDATA[
+				INSERT INTO board
+				VALUES (null, #{title }, #{contents }, 0, now(),
+						(SELECT IFNULL(MAX(g_no), 0) + 1 FROM board a ),
+						1, 0, #{userId })
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				INSERT INTO board
+				VALUES (null, #{title }, #{contents }, 0, now(),
+						#{gNo }, #{oNo} + 1, #{depth} + 1, #{userId })				
+				]]>
+			</otherwise>
+		</choose>
+	</insert>	
+	
+	<resultMap id="boardMap" type="boardvo">
+		<id property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="contents" column="contents"/>
+		<result property="hit" column="hit"/>
+		<result property="regDate" column="reg_date"/>
+		<result property="gNo" column="g_no"/>
+		<result property="oNo" column="o_no"/>
+		<result property="depth" column="depth"/>
+		<result property="userName" column="name"/>
+		<result property="userId" column="user_id"/>
+	</resultMap>
+	
+	<select id="findByKeyword" resultMap="boardMap">
+	    <![CDATA[
+		    SELECT b.id, b.title, b.contents, b.hit, b.reg_date,
+		           b.g_no, b.o_no, b.depth,
+		           a.name, a.id AS user_id
+		    FROM board b
+		    JOIN user a ON a.id = b.user_id
+	    ]]>
+	    <where>
+	    	<if test="keyword != null and keyword.trim().length() > 0">
+	    		(b.title LIKE CONCAT('%', #{keyword}, '%') OR b.contents LIKE CONCAT('%', #{keyword}, '%'))
+	    	</if>
+	    </where>
+	    ORDER BY b.g_no DESC, b.o_no
+	    LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<update id="increaseHit">
+		<![CDATA[
+			UPDATE board SET hit = hit + 1 WHERE id = #{id};
+		]]>
+	</update>
+	
+	<update id="updateBoard">
+		<![CDATA[
+			UPDATE board SET title=#{title},
+			contents=#{contents}
+			WHERE id=#{id}
+		]]>
+	</update>
+	
+	<!-- camelCase 불일치를 alias로 해결 -->
+	<select id="findById" resultType="boardvo">
+		<![CDATA[
+			SELECT id, title, contents, hit, 
+			reg_date as regDate, 
+			g_no as gNo, o_no as oNo, depth, 
+			user_id as userId
+			FROM board WHERE id = #{id};
+		]]>
+	</select>
+	
+	<!-- resultType은 쿼리의 반환 결과의 타입(형식)을 명시해준다. -->
+	<select id="countByKeyword" resultType="int">
+		<choose>
+			<when test="keyword == null or keyword.length() == 0">
+				<![CDATA[
+					SELECT COUNT(*) FROM board
+				]]>
+			</when>
+			<otherwise>
+			<!-- MyBatis에서 연결 표현은 CONCAT을 사용한다. -->
+			<!-- CDATA는 XML에서 Character Data 섹션을 의미하며, 
+				XML 파서가 섹션 내부의 내용을 텍스트 데이터 그대로 처리하도록 지정해준다. -->
+				<![CDATA[
+					SELECT COUNT(*) FROM board b 
+					WHERE b.contents LIKE CONCAT('%', #{keyword}, '%')
+						OR b.title LIKE CONCAT('%', #{keyword}, '%')
+				]]>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<delete id="deleteByIdAndUserId">
+		<![CDATA[
+			DELETE FROM board WHERE id=#{id} AND user_id=#{userId}
+		]]>
+	</delete>
+	
+</mapper>
