@@ -12,7 +12,7 @@
     |   |   |--- LocaleConfig.java
     |   |   |--- FileuploadConfig.java
     |--- initializer
-    |   |--- MySiteWebApplicationInitializer    
+    |   |--- MySiteWebApplicationInitializer
     |--- controller
     |--- service
     |--- repository
