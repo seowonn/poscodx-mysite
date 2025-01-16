@@ -14,9 +14,9 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -69,12 +69,20 @@ public class MvcConfig implements WebMvcConfigurer {
 		converters.add(mappingJackson2HttpMessageConverter());
 	}
 
-	// DefaultServlet Handler
+	// static(assets) url mapping
 	@Override
-	public void configureDefaultServletHandling(
-			DefaultServletHandlerConfigurer configurer) {
-		configurer.enable();
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/assets/**")
+				.addResourceLocations("classpath:assets/");
 	}
+	// 아래 코드 대체 가능
+
+	// DefaultServlet Handler
+//	@Override
+//	public void configureDefaultServletHandling(
+//			DefaultServletHandlerConfigurer configurer) {
+//		configurer.enable();
+//	}
 
 	// ApplicationContextEventListener
 	@Bean
@@ -82,8 +90,11 @@ public class MvcConfig implements WebMvcConfigurer {
 		return new ApplicationContextEventListener();
 	}
 
+	/**
+	 * 커스텀 Interceptor를 추가하기 위해 임의로 siteInterceptor를 Bean으로 
+	 * Spring Application Context에 등록한다. 
+	 */
 	@Bean
-	// Interceptors
 	public HandlerInterceptor siteInterceptor() {
 		return new SiteInterceptor();
 	}
