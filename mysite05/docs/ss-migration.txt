@@ -20,15 +20,18 @@
 	   formLogin().loginPage("/user/login")
 
 4. 로그인 처리
-	1) AuthenticationManager 설정
-	2) loginProcessingUrl('/user/auth')
-	3) usernameParameter("email")
-	4) passwordParameter("password")
-	5) UserDetailsServiceImpl & UserDetails 구현
-	6) 기존 UserService 수정: PasswordEncoder로 비밀번호 암호화 하기
-	7) defaultSuccessurl('/')
-	8) failureUrl("/user/login?result=fail")
+	1) formLogin.loginProcessingUrl('/user/auth')
+	2) formLogin.usernameParameter("email")
+	3) formLogin.passwordParameter("password")
+	4) formLogin.defaultSuccessurl('/')
+	5) failureUrl("/user/login?result=fail")
+	
+	6) AuthenticationManager 설정
+	7) UserDetailsServiceImpl & UserDetails 구현
+	8) 기존 UserService 수정: PasswordEncoder로 비밀번호 암호화 하기
+	
 	9) JSP UI 처리(Spring Security Tag Library)
+	10) Principal(구 authUser, @AuthUser 처리)
 
 5. 로그아웃 처리
 	1) Logout Configurer 설정
