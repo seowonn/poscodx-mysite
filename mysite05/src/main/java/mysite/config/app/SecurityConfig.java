@@ -1,6 +1,5 @@
 package mysite.config.app;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,9 +25,6 @@ import mysite.security.UserDetailsServiceImpl;
  */
 @EnableWebSecurity
 public class SecurityConfig {
-	
-	@Autowired
-	private UserRepository userRepository;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -72,11 +68,11 @@ public class SecurityConfig {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder(4); // 4 ~ 31
+		return new BCryptPasswordEncoder(4); // 4 ~ 31  
 	}
 
 	@Bean
-	public UserDetailsService userDetailsService() {
+	public UserDetailsService userDetailsService(UserRepository userRepository) {
 		return new UserDetailsServiceImpl(userRepository);
 	}
 
