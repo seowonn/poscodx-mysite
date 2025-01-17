@@ -36,13 +36,11 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		if(!supportsParameter(parameter)) {
-			System.out.println("Sdfsdfs");
 			return WebArgumentResolver.UNRESOLVED;
 		}
 		
 		HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 		HttpSession session = request.getSession();
-		System.out.println("여기도 옴");
 		return session.getAttribute("authUser");
 	}
 

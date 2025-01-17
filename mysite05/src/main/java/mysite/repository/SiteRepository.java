@@ -15,12 +15,7 @@ public class SiteRepository {
 	}
 	
 	public SiteVo find() {
-		SiteVo sdfs = sqlSession.selectOne("site.find");
-		System.out.println(sdfs.getDescription());
-		System.out.println(sdfs.getTitle());
-		System.out.println(sdfs.getProfile());
-		System.out.println(sdfs.getWelcome());
-		return sdfs;
+		return sqlSession.selectOne("site.find");
 	}
 	
 	public void update(SiteVo siteVo) {
