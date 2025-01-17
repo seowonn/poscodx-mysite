@@ -2,8 +2,10 @@ package mysite.initializer;
 
 import java.util.ResourceBundle;
 
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import jakarta.servlet.Filter;
 import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.ServletRegistration.Dynamic;
 import mysite.config.AppConfig;
@@ -29,6 +31,16 @@ public class MySiteWebApplicationInitializer
 	@Override
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
+	}
+
+	/**
+	 * FilterChainProxy는 SpringSecurity에서 제공되는 특수 필터로 
+	 * SpringSecurityFilterChain이라는 이름을 가진 Bean을 호출하여 
+	 * SecurityFilter의 역할을 수행한다.
+	 */
+	@Override
+	protected Filter[] getServletFilters() {
+		return new Filter[] { new DelegatingFilterProxy("springSecurityFilterChain") };
 	}
 
 	@Override

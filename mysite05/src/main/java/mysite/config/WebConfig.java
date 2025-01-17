@@ -8,11 +8,10 @@ import org.springframework.context.annotation.Import;
 import mysite.config.web.FileUploadConfig;
 import mysite.config.web.LocaleConfig;
 import mysite.config.web.MvcConfig;
-import mysite.config.web.SecurityConfig;
 
 @Configuration
 @EnableAspectJAutoProxy
-@Import({MvcConfig.class, SecurityConfig.class, LocaleConfig.class, FileUploadConfig.class})
+@Import({MvcConfig.class, LocaleConfig.class, FileUploadConfig.class})
 @ComponentScan({"mysite.controller", "mysite.exception"})
 public class WebConfig {
 	
