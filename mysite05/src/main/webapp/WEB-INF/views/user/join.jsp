@@ -21,7 +21,7 @@
 			}
 		
 			$.ajax({
-				url: "${pageContext.request.contextPath}/api/user/checkemail?email=" + email,
+				url: "${pageContext.request.contextPath}/api2222/user/checkemail?email=" + email,
 				type: "get",
 				dataType: "json",
 				success: function(response) {
@@ -43,6 +43,7 @@
 				},
 				error: function(xhr, status, err) {
 					console.error(err);
+					console.error("Response: " + xhr.responseText);
 				}
 			});
 		});
@@ -65,7 +66,7 @@
 						<form:errors path="name" />
 					</p>
 					
-					<label class="block-label" for="email"><spring:message code="user.join.label.email" /></label>
+					<label class="block-label" for="email"><spring:message code="user.join.label.id" /></label>
 					<form:input path="email" />
 					<input id="btn-check" type="button" value="중복 확인" style="display:;">
 					<img id="img-check" src="${pageContext.request.contextPath}/assets/images/check.png" 

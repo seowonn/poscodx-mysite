@@ -17,12 +17,6 @@ public class LoginInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 			Object handler) throws Exception {
-		/**
-		 * UserService 단에서 Bean 주입이 아니라 생성자 주입으로 UserRepository를 주입함 때문에 그냥
-		 * UserService()로 작성 시, UserRepository 설정이 안되었기 때문에 에러가 뜸. 즉 주입해야함을 바로 인지할 수 있음,
-		 * new 해서 UserService 객체를 직접 생성하여 사용하는 실수를 방지해줌. +) 기존 Controller에서 확인하던 로그인 처리를
-		 * 여기서 진행 (Interceptor로 옮겨서 중복 코드 제거 및 관심사 분리)
-		 */
 
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
