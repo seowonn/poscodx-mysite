@@ -11,6 +11,7 @@ import mysite.config.WebConfig;
 @Import({AppConfig.class, WebConfig.class})
 public class MySiteApplication {
 	
+	
 	public static void main(String[] args) {
 		SpringApplication.run(MySiteApplication.class, args);
 	}

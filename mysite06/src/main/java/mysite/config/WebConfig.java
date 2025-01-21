@@ -14,5 +14,4 @@ import mysite.config.web.MvcConfig;
 @Import({MvcConfig.class, LocaleConfig.class, FileUploadConfig.class})
 @ComponentScan({"mysite.controller", "mysite.exception"})
 public class WebConfig {
-	
 }

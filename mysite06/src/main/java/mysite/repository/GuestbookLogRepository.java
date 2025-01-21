@@ -8,8 +8,8 @@ public class GuestbookLogRepository {
 	
 	private SqlSession sqlSession;
 	
-	public GuestbookLogRepository(SqlSession jdbcContext) {
-		this.sqlSession = jdbcContext;
+	public GuestbookLogRepository(SqlSession sqlSession) {
+		this.sqlSession = sqlSession;
 	}
 	
 	public int insert() {
