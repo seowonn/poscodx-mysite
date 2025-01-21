@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
-import mysite.security.Auth;
 import mysite.service.BoardService;
 import mysite.vo.BoardVo;
 import mysite.vo.UserVo;
@@ -32,7 +31,6 @@ public class BoardController {
 		return "board/list";
 	}
 	
-	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public String getNewWriteForm(@RequestParam(value = "id", required = false) Long id,
 			Model model) {
@@ -43,7 +41,6 @@ public class BoardController {
 		return "board/write";
 	}
 	
-	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public String write(HttpSession session, BoardVo boardVo) {
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
@@ -52,7 +49,6 @@ public class BoardController {
 		return "redirect:/board";
 	}
 	
-	@Auth
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public String view(@RequestParam("id") Long id, Model model) {
 		BoardVo boardVo = boardService.getContents(id);
@@ -60,7 +56,6 @@ public class BoardController {
 		return "board/view";
 	}
 	
-	@Auth
 	@RequestMapping(value = "/update", method = RequestMethod.GET)
 	public String getUpdateForm(HttpSession session, @RequestParam("id") Long id, Model model) {
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
@@ -70,7 +65,6 @@ public class BoardController {
 		return "board/modify";
 	}
 	
-	@Auth
 	@RequestMapping(value = "/update", method = RequestMethod.POST) 
 	public String update(@RequestParam("id") Long id, BoardVo boardVo) {
 		boardVo.setId(id);
@@ -78,7 +72,6 @@ public class BoardController {
 		return "redirect:/board/view?id=" + id; // 브라우저가 해당 요청을 get로 보내게 된다.
 	}
 	
-	@Auth
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String delete(HttpSession session, 
 			@RequestParam("id") Long id,

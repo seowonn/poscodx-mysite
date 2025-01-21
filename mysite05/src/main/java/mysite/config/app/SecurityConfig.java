@@ -36,37 +36,49 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			.csrf((csrf) -> {
-				csrf.disable();
-			})
+			.csrf((csrf) -> csrf.disable())
 			.formLogin((formLogin) -> {
 				formLogin.loginPage("/user/login")
-						.loginProcessingUrl("/user/auth")
-						.usernameParameter("email")
-						.passwordParameter("password")
-						.defaultSuccessUrl("/")
-//							.failureUrl("/user/login?result=fail");
-						.failureHandler(
-								new AuthenticationFailureHandler() {
-									@Override
-									public void onAuthenticationFailure(HttpServletRequest request,
-											HttpServletResponse response, AuthenticationException exception)
-											throws IOException, ServletException {
-										request.setAttribute("email", request.getParameter("email"));
-										request.setAttribute("result", "fail");
-										request.getRequestDispatcher("/user/login")
-										.forward(request, response);
-									}
-								}
-						);
-				}).authorizeHttpRequests((authorizeRequests) -> {
+					.loginProcessingUrl("/user/auth")
+					.usernameParameter("email")
+					.passwordParameter("password")
+					.defaultSuccessUrl("/")
+//					.failureUrl("/user/login?result=fail");
+					.failureHandler(
+						new AuthenticationFailureHandler() {
+							@Override
+							public void onAuthenticationFailure(HttpServletRequest request,
+									HttpServletResponse response, AuthenticationException exception)
+									throws IOException, ServletException {
+								request.setAttribute("email", request.getParameter("email"));
+								request.setAttribute("result", "fail");
+								request.getRequestDispatcher("/user/login")
+								.forward(request, response);
+							}
+						}
+					);
+				})
+			.logout((logout) -> {
+				logout
+				.logoutUrl("/user/logout")
+				.logoutSuccessUrl("/");
+			})
+			.authorizeHttpRequests((authorizeRequests) -> {
 				/* ACL */
 				authorizeRequests
-						.requestMatchers(
-								new RegexRequestMatcher("^/user/updates$", null))
-						.authenticated()
-						.anyRequest()
-						.permitAll();
+					.requestMatchers(new RegexRequestMatcher("^/admin/?.*$", null))
+					.hasAnyRole("ADMIN")
+				
+					.requestMatchers(new RegexRequestMatcher("^/user/updates$", null))
+//					.authenticated()
+					.hasAnyRole("ADMIN", "USER")
+					
+					.requestMatchers(new RegexRequestMatcher("^/board/?(write|modify|delete|reply)$", null))
+//					.authenticated()
+					.hasAnyRole("ADMIN", "USER")
+					
+					.anyRequest()
+					.permitAll();
 			});
 		return http.build();
 	}
