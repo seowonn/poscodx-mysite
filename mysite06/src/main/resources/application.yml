@@ -18,7 +18,7 @@ spring:
       proxy-target-class: true
 
    mvc:
-      static-path-patter: /assets/**
+      static-path-pattern: /assets/**
 #      view:
 #         prefix: /WEB-INF/views/
 #         suffix: .jsp
@@ -54,3 +54,10 @@ server:
    port: 8080
    servlet:
       context-path: /mysite06
+   error:
+      whitelabel:
+         enabled: false
+      path: /error
+
+logging:
+   config: classpath:logback.xml 	

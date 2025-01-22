@@ -9,9 +9,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>403 Forbidden</h1>
+	<h1>Forbidden(404) : Custom</h1>
 	<p>
-		접근 금지된 페이지입니다.
+		 접근금지!
 	</p>
 </body>
 </html>

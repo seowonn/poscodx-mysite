@@ -6,7 +6,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -38,13 +37,6 @@ public class MvcConfig implements WebMvcConfigurer {
 		viewResolver.setExposedContextBeanNames("site");
 
 		return viewResolver;
-	}
-
-	// static(assets) url mapping
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/assets/**")
-				.addResourceLocations("classpath:assets/");
 	}
 
 	// ApplicationContextEventListener
