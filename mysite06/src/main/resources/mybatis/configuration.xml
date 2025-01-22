@@ -10,10 +10,10 @@
 	 </typeAliases>
 	 
 	<mappers>
-		<mapper resource="mysite/config/app/mybatis/mappers/guestbook.xml" />
-		<mapper resource="mysite/config/app/mybatis/mappers/guestbook-log.xml" />
-		<mapper resource="mysite/config/app/mybatis/mappers/user.xml" />
-		<mapper resource="mysite/config/app/mybatis/mappers/board.xml" />
-		<mapper resource="mysite/config/app/mybatis/mappers/site.xml" />
+		<mapper resource="mybatis/mappers/guestbook.xml" />
+		<mapper resource="mybatis/mappers/guestbook-log.xml" />
+		<mapper resource="mybatis/mappers/user.xml" />
+		<mapper resource="mybatis/mappers/board.xml" />
+		<mapper resource="mybatis/mappers/site.xml" />
 	</mappers>
 </configuration>

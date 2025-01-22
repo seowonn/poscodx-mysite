@@ -10,12 +10,44 @@ spring:
       livereload:
          enabled: true
 
+   main:
+      allow-bean-definition-overriding: true
+
    aop:
       auto: true
       proxy-target-class: true
 
-   main:
-      allow-bean-definition-overriding: true
+   mvc:
+      static-path-patter: /assets/**
+#      view:
+#         prefix: /WEB-INF/views/
+#         suffix: .jsp
+   web:
+      resources:
+         static-locations: [classpath:assets/, file:/mysite-uploads/]
+
+   servlet:
+      multipart:
+         enabled: true
+         max-file-size: 10485760
+         max-request-size: 104857600
+         file-size-threshold: 5242880
+  
+   messages:
+      basename: messages/message
+      encoding: utf-8
+
+   datasource:
+      driver-class-name: org.mariadb.jdbc.Driver
+      url: jdbc:mariadb://192.168.0.17:3306/webdb
+      username: webdb
+      password: webdb
+      hikari:
+         mininum-idle: 10
+         maximum-pool-size: 20
+
+mybatis:
+   config-location: classpath:mybatis/configuration.xml   
  
 # server configuration
 server:
