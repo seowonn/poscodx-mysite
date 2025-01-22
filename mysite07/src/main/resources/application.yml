@@ -1,0 +1,63 @@
+# SpringApplication.run으로 실행할 때만 의미 있는 파일
+# spring configuration
+spring:
+   application:
+      name: mysite07
+
+   devtools:
+      restart: 
+         enabled: true 
+      livereload:
+         enabled: true
+
+   main:
+      allow-bean-definition-overriding: true
+
+   aop:
+      auto: true
+      proxy-target-class: true
+
+   mvc:
+      static-path-pattern: /assets/**
+#      view:
+#         prefix: /WEB-INF/views/
+#         suffix: .jsp
+   web:
+      resources:
+         static-locations: [classpath:assets/, file:/mysite-uploads/]
+
+   servlet:
+      multipart:
+         enabled: true
+         max-file-size: 10485760
+         max-request-size: 104857600
+         file-size-threshold: 5242880
+  
+   messages:
+      basename: messages/message
+      encoding: utf-8
+
+   datasource:
+      driver-class-name: org.mariadb.jdbc.Driver
+      url: jdbc:mariadb://192.168.0.17:3306/webdb
+      username: webdb
+      password: webdb
+      hikari:
+         mininum-idle: 10
+         maximum-pool-size: 20
+
+mybatis:
+   config-location: classpath:mybatis/configuration.xml   
+ 
+# server configuration
+server:
+   port: 8080
+   servlet:
+      context-path: /
+   error:
+      whitelabel:
+         enabled: false
+      path: /error
+
+logging:
+   config: classpath:logback.xml 	
