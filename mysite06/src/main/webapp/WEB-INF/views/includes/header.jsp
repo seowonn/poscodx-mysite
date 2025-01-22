@@ -14,14 +14,12 @@
 	
 	// 브라우저에 이벤트를 걸 수 있다. 
 	// DOM뿐만 아니라 모든 리소스(HTML, CSS, 이미지 등)가 다 로딩된 후에 실행된다.
-	window.addEventListener("load", function f() {
-		console.log(document.body); // 이제 정상적으로 출력됨
-		
+	window.addEventListener("load", function() {
 		// id가 languages인 영역 중 a 태그를 nodeList 형태로 반환
-		anchors = document.querySelectorAll('#languages a');
+		var anchors = document.querySelectorAll('#languages a');
 		
 		anchors.forEach(function(el) {
-			el.addEventListener("click", function() {
+			el.addEventListener("click", function(event) {
 				// click이 나오고 바로 사라짐.
 				// 이유: a 태그가 링크 이동이라 바로 이동하기 때문
 				event.preventDefault(); // 따라서 a 태그의 기본동작을 막아 리로딩을 막음

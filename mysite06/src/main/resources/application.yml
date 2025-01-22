@@ -1,0 +1,24 @@
+# SpringApplication.run으로 실행할 때만 의미 있는 파일
+# spring configuration
+spring:
+   application:
+      name: mysite06
+
+   devtools:
+      restart: 
+         enabled: true 
+      livereload:
+         enabled: true
+
+   aop:
+      auto: true
+      proxy-target-class: true
+
+   main:
+      allow-bean-definition-overriding: true
+ 
+# server configuration
+server:
+   port: 8080
+   servlet:
+      context-path: /mysite06
